@@ -5,6 +5,7 @@ export type TableListItem = {
   createTime: string;
   content: string;
   stat: boolean;
+  userId: string;
 };
 
 export type TableListPagination = {

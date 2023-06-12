@@ -1,16 +1,16 @@
-import { PlusOutlined } from '@ant-design/icons';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Badge, Button, Drawer, Form, Image, Input, message, Modal, Popconfirm } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Badge, Button, Drawer, Form, Image, Input, message, Modal, Popconfirm, Select } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
 import type { TableListItem, TableListPagination } from './data';
 import { replayRule, removeRule, rule, updateRule, getDetailRule } from './service';
 import ProForm from '@ant-design/pro-form';
+import style from './style.less'
 /**
  * 更新节点
  *
@@ -74,15 +74,54 @@ const TableList: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<TableListItem>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
   const [content, setContent] = useState('');
-  const [sendContent, setSendContent] = useState('');
   const formRef = useRef<any>();
+  const [historyList, setHistoryList] = useState([])
+  const [freshTime, setFreshTime] = useState(30)
+  const [selectValue, setselectValue] = useState('30')
+  const timer = useRef<any>(null)
+
+  const selectoptions = [
+    {label: '10s', value: 10},
+    {label: '30s', value: 30},
+    {label: '60s', value: 60},
+    {label: '120s', value: 120},
+  ]
   const handleUpdateRecord = (record: TableListItem) => {
+    formRef?.current?.resetFields();
+    getDetailRule({form: record.form}).then(res => {
+      if (res.code === 200) {
+        setHistoryList(res.data)
+      }
+    })
     setCurrentRow(record);
     handleModalVisible(true);
-    formRef?.current?.resetFields();
-    setContent(record.content)
-    setSendContent('')
+    setContent('')
   };
+
+  const getCurrentTime = (time: any) => {
+    clearInterval(timer.current)
+    let ctime = Number(time)
+    if (!isNaN(ctime)) {
+      timer.current = setInterval(() => {
+        ctime -= 1
+        if (ctime === 0) {
+          ctime = Number(time)
+          actionRef.current?.reloadAndRest?.();
+        }
+        setFreshTime(ctime)
+      }, 1000)
+    }
+  }
+
+  const onchangeSelect = (e: string) => {
+    setselectValue(e)
+    getCurrentTime(e)
+  }
+
+  useEffect(() => {
+    getCurrentTime(selectValue)
+    return () => clearInterval((timer as any).current)
+  }, [])
   const columns: ProColumns<any>[] = [
     {
       title: 'ID',
@@ -100,16 +139,16 @@ const TableList: React.FC = () => {
       dataIndex: 'content',
       className: 'textAreaClass',
     },
-    {
-      title: '发送人头像',
-      dataIndex: 'formPhoto',
-      className: 'fullClass',
-      render: (_, record) => {
-        return (
-          <Image src={record.formPhoto} width={120} height={120} style={{ objectFit: 'contain' }} />
-        );
-      },
-    },
+    // {
+    //   title: '发送人头像',
+    //   dataIndex: 'formPhoto',
+    //   className: 'fullClass',
+    //   render: (_, record) => {
+    //     return (
+    //       <Image src={record.formPhoto} width={120} height={120} style={{ objectFit: 'contain' }} />
+    //     );
+    //   },
+    // },
     {
       title: '接收人Id',
       dataIndex: 'to',
@@ -161,7 +200,7 @@ const TableList: React.FC = () => {
     const hide = message.loading('正在回复');
     try {
       const res = await replayRule({
-        content: sendContent,
+        content: content,
         to: currentRow?.form,
         type: 1,
       });
@@ -183,6 +222,18 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
+      <div className={style.countTimeWrapper}>
+        <span className={style.pinlv}>刷新频率</span>
+        <Select placeholder='请选择刷新频率' style={{width: 80, marginRight:  '12px'}} onChange={(e) => onchangeSelect(e)} value={selectValue}>
+        {
+          selectoptions.map(item => {
+            return <Select.Option key={item.value}>{item.label}</Select.Option>
+          })
+        }
+        </Select>
+        <span className={style.countTime}>将在{freshTime}秒后刷新</span>
+
+      </div>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}
         rowKey="id"
@@ -244,16 +295,35 @@ const TableList: React.FC = () => {
       <Modal
         title="回复"
         visible={createModalVisible}
+        width={700}
         onOk={() => handleOk()}
         onCancel={() => handleModalVisible(false)}
       >
         <ProForm formRef={formRef} submitter={false}>
-          <Form.Item label="对方发送消息">
-            <Input.TextArea value={content} />
-          </Form.Item>
-          <Form.Item label="回复消息">
-            <Input.TextArea placeholder='请输入回复内容' value={sendContent} onChange={(e) => setSendContent(e.target.value)} />
-          </Form.Item>
+          <div className={style.list}>
+            <h2>聊天记录</h2>
+            {
+              historyList.map((item: any) => {
+                return <div className={`${style.listItem} ${item.form == 1 ? style.specialClass : ''}`} key={item.createTime}>
+                {
+                  item.form == 1 ? <>
+                  <div className={style.content}>
+                    <p>{item.createTime}</p>
+                    {item.content}
+                  </div>
+                  <img src={item.formPhoto || 'http://img.zhengtaixinnengyuan.com/images/2023-06-11/b03b0934833b48748fa472378bca45c9.png'} /></> : <><img src={item.formPhoto} alt='无'/>
+                <div className={style.content}>
+                  <p>{item.createTime}</p>
+                  {item.content}
+                </div></>
+                }
+              </div>
+              })
+            }
+           
+          </div>
+          <h3>回复消息：</h3>
+          <Input.TextArea placeholder='请输入回复内容' value={content} onChange={(e) => setContent(e.target.value)} />
         </ProForm>
       </Modal>
       <UpdateForm

@@ -18,9 +18,9 @@ request.interceptors.request.use((url, options) => {
   options.timeout = 500000;
   // 本地访问需要做代理，否则会跨域；线上生成由于ng没有反向代理，就直连接口，而且是同一个域下的
   const { REACT_APP_ENV } = process.env;
-  let before = ''
-  if (REACT_APP_ENV === 'pre') {
-    before = 'http://www.zhengtaixinnengyuan.com'
+  let before = 'http://www.zhengtaixinnengyuan.com'
+  if (REACT_APP_ENV === 'test') {
+    before = ''
   }
   return {
     url: `${before}${url}`,
@@ -49,15 +49,15 @@ request.interceptors.response.use(async (response, options) => {
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
   // const { initialState } = useModel('@@initialState');
-  // return request<{
-  //   data: API.CurrentUser;
-  // }>(`/admin/administer/getPageList`, {
-  //   method: 'GET',
-  //   ...(options || {}),
-  // });
-  return new Promise(rosolve => {
-    rosolve({accountName: localStorage.getItem('accountName')})
-  })
+  return request<{
+    data: API.CurrentUser;
+  }>(`/admin/administer/getPageList?pageNum=1&pageSize=20`, {
+    method: 'GET',
+    ...(options || {}),
+  });
+  // return new Promise(rosolve => {
+  //   rosolve({accountName: localStorage.getItem('accountName')})
+  // })
 }
 
 /** 退出登录接口 POST /api/login/outLogin */

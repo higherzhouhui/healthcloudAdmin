@@ -1,20 +1,20 @@
 export type TableListItem = {
-  key: number;
-  disabled?: boolean;
-  href: string;
-  avatar: string;
-  name: string;
-  owner: string;
-  desc: string;
-  callNo: number;
-  status: string;
-  updatedAt: Date;
-  createdAt: Date;
-  progress: number;
+  course: string;
+  expandRule: string;
+  groupFreezeDay: string;
+  groupFreezeRatio: string;
+  groupName: string;
+  groupNum: string;
+  groupOne: string;
+  groupPhoto: string;
+  groupThree: string;
+  groupTwo: string;
+  id: string;
+  officialGroup: string;
+  video: string;
 };
 
 export type TableListPagination = {
-  total: number;
   pageSize: number;
   current: number;
 };
