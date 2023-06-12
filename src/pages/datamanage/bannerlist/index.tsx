@@ -273,7 +273,7 @@ const TableList: React.FC = () => {
             }}
           />
           <Form.Item label="">
-            <Input value={image} readOnly placeholder='请上传图片'/>
+            <Input value={image} onChange={(e) => setImage(e.target.value)} placeholder='请上传图片'/>
           </Form.Item>
           <Form.Item label="跳转地址(选填)">
             <Input value={url} onChange={onChangeUrl} placeholder='请输入点击后跳转地址'/>

@@ -295,11 +295,9 @@ const TableList: React.FC = () => {
               ...Upload,
             }}
           />
-          {
-            currentRow.image ? <Form.Item label=''>
-            <Input value={currentRow.image} readOnly placeholder='请选择封面'/>
-          </Form.Item> : null
-          }
+          <Form.Item label=''>
+            <Input value={currentRow.image} onChange={(e) => handleChange(e.target.value, 'image')} placeholder='请选择封面'/>
+          </Form.Item> 
           <Form.Item label='标题'>
             <Input value={currentRow?.title} onChange={(e) => handleChange(e.target.value, 'title')} placeholder='请输入标题'/>
           </Form.Item>
