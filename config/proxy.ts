@@ -9,21 +9,21 @@
 export default {
   dev: {
     '/admin/': {
-      target: 'http://www.zhengtaixinnengyuan.com',
+      target: 'https://338v828404.goho.co',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
   },
   test: {
     '/admin/': {
-      target: 'http://www.zhengtaixinnengyuan.com',
+      target: 'https://338v828404.goho.co',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
   },
   pre: {
     '/none/': {
-      target: 'http://www.zhengtaixinnengyuan.com',
+      target: 'https://338v828404.goho.co',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
