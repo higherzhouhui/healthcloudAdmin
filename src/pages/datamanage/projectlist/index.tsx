@@ -2,12 +2,13 @@ import { PlusOutlined } from '@ant-design/icons';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Form, Image, Input, message, Modal, Popconfirm } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Popconfirm, Radio } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { TableListItem, TableListPagination } from './data';
 import { addRule, removeRule, rule } from './service';
 import ProForm, { ProFormUploadButton } from '@ant-design/pro-form';
 import { request } from 'umi';
+import WangEditor from '@/components/Editor';
 
 /**
  * 删除节点
@@ -48,6 +49,8 @@ const TableList: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<TableListItem | any>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
   const formRef = useRef<any>()
+  const [type, setType] = useState(1)
+
   const handleUpdateRecord = (record: TableListItem) => {
     setCurrentRow(record);
     handleModalVisible(true);
@@ -79,16 +82,12 @@ const TableList: React.FC = () => {
       dataIndex: 'price',
     },
     {
-      title: '正泰补贴',
-      dataIndex: 'chntSubsidy',
+      title: type == 1 ? '数字人民币' : '详情',
+      dataIndex: type == 1 ? 'chntSubsidy' : 'showDetail',
     },
     {
-      title: '每日收益',
+      title: '每日社保补贴',
       dataIndex: 'dayEarnings',
-    },
-    {
-      title: '周期（天）',
-      dataIndex: 'period',
     },
     {
       title: '创建时间',
@@ -132,7 +131,7 @@ const TableList: React.FC = () => {
   const handleOk = async () => {
     const hide = message.loading(`正在${currentRow?.id ? '更新' : '新增'}`);
     try {
-      const res = await addRule(currentRow);
+      const res = await addRule({...currentRow, projectType: type});
       handleModalVisible(false);
       hide();
       if (res.code === 200) {
@@ -166,7 +165,7 @@ const TableList: React.FC = () => {
       // /upload为图片上传的地址，后台只需要一个图片的path
       // name，path，status是组件上传需要的格式需要自己去拼接
       request('/admin/upload/uploadImage', { method: 'POST', data: formData })
-        .then((data) => {
+        .then((data: any) => {
           const _response = { name: file.name, status: 'done', path: data.data };
           handleChange(data.data, 'image');
           //请求成功后把file赋值上去
@@ -176,8 +175,25 @@ const TableList: React.FC = () => {
     },
   };
 
+  const onchangeType = (e: any) => {
+    setType(e.target.value * 1)
+    actionRef?.current?.reloadAndRest?.()
+  }
+  const removeHtmlTag = (content?: string) => {
+    if (typeof content === 'string') {
+      const reg = new RegExp('<[^>]*>', 'g');
+      let tStr = content.replace(reg, '');
+      tStr = tStr?.replace('&nbsp;', ''); // 过滤空格
+      return tStr;
+    }
+    return '';
+  };
   return (
     <PageContainer>
+      <Radio.Group defaultValue={type} size="middle" onChange={(e) => onchangeType(e)} buttonStyle="solid">
+        <Radio.Button value={1}>信托</Radio.Button>
+        <Radio.Button value={2}>股权</Radio.Button>
+      </Radio.Group>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}
         rowKey="id"
@@ -188,7 +204,7 @@ const TableList: React.FC = () => {
         }}
         scroll={{
           x: 1400,
-          y: document?.body?.clientHeight - 390,
+          y: document?.body?.clientHeight - 420,
         }}
         toolBarRender={() => [
           <Button type="primary" key="primary" onClick={() => addNewNotice()}>
@@ -198,8 +214,13 @@ const TableList: React.FC = () => {
         ]}
         request={async (params: TableListPagination) => {
           const res: any = await rule({ pageNum: params.current, pageSize: params.pageSize });
+          const list = res?.data?.list || []
+          list.map((item: any) => {
+            item.showDetail = removeHtmlTag(item.details)
+          })
+          const data = list.filter((item: any) => item.projectType == type)
           return {
-            data: res?.data?.list || [],
+            data: data,
             page: res?.data?.pageNum,
             success: true,
             total: res?.data?.totalSize,
@@ -249,10 +270,11 @@ const TableList: React.FC = () => {
       <Modal
         title={currentRow?.id ? '修改' : '新增'}
         visible={createModalVisible}
+        width={type == 1 ? 600 : '80%'}
         onOk={() => handleOk()}
         onCancel={() => handleModalVisible(false)}
       >
-        <ProForm formRef={formRef} submitter={false}>
+        <ProForm formRef={formRef} submitter={false} style={{height: '500px', overflow: 'auto'}}>
           <Form.Item label="标题">
             <Input value={currentRow?.title} onChange={(e) => handleChange(e.target.value, 'title')}/>
           </Form.Item>
@@ -264,23 +286,20 @@ const TableList: React.FC = () => {
               ...Upload,
             }}
           />
-          {
-            currentRow?.image ? <Form.Item label="">
-            <Input value={currentRow?.image} placeholder='请选择图片' />
-          </Form.Item> : null
-          }
+          <Form.Item label="">
+            <Input value={currentRow?.image} onChange={(e) => handleChange(e.target.value, 'image')} placeholder='请选择图片' />
+          </Form.Item>
           <Form.Item label="价格">
             <Input type='number' value={currentRow?.price} onChange={(e) => handleChange(e.target.value, 'price')} placeholder='请输入价格'/>
           </Form.Item>
-          <Form.Item label="正泰补贴">
+          <Form.Item label="每日社保补贴">
+            <Input type='number' value={currentRow?.dayEarnings} onChange={(e) => handleChange(e.target.value, 'dayEarnings')} placeholder='请输入每日社保补贴'/>
+          </Form.Item>
+          {
+            type == 1 ? <Form.Item label="数字人民币">
             <Input type='number' value={currentRow?.chntSubsidy} onChange={(e) => handleChange(e.target.value, 'chntSubsidy')} placeholder='请输正泰补贴'/>
-          </Form.Item>
-          <Form.Item label="每日收益">
-            <Input type='number' value={currentRow?.dayEarnings} onChange={(e) => handleChange(e.target.value, 'dayEarnings')} placeholder='请输入每日收益'/>
-          </Form.Item>
-          <Form.Item label="周期">
-            <Input type='number' value={currentRow?.period} onChange={(e) => handleChange(e.target.value, 'period')} addonAfter="天" placeholder='请输入周期'/>
-          </Form.Item>
+          </Form.Item> : <Form.Item label='详情'><WangEditor description={currentRow?.details || ''} onChange={(e) => handleChange(e, 'details')} /></Form.Item>
+          }
         </ProForm>
       </Modal>
     </PageContainer>
