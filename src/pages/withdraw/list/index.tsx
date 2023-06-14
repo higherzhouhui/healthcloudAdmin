@@ -1,11 +1,10 @@
-import { PlusOutlined } from '@ant-design/icons';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Form, Image, Input, message, Modal, Popconfirm } from 'antd';
+import { Button, Form, Input, message, Modal, Popconfirm } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { TableListItem, TableListPagination } from './data';
-import { addRule, removeRule, rule } from './service';
+import { addRule, removeRule, rule, updateRule } from './service';
 import ProForm, { ProFormUploadButton } from '@ant-design/pro-form';
 import { request } from 'umi';
 
@@ -48,73 +47,101 @@ const TableList: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<TableListItem | any>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
   const formRef = useRef<any>()
-  const handleUpdateRecord = (record: TableListItem) => {
-    setCurrentRow(record);
-    handleModalVisible(true);
-    formRef?.current?.resetFields();
+  const handleUpdateRecord = (record: TableListItem, type: number) => {
+    const hide = message.loading('正在操作中...');
+    updateRule({
+      id: record.id,
+      auditStatus: type
+    }).then((res: any) => {
+      hide();
+      if (res.code === 200) {
+        message.success('操作完成，即将刷新');
+        actionRef.current?.reloadAndRest?.();
+      }
+    }).catch(() => {
+      hide();
+    })
+    // setCurrentRow(record);
+    // handleModalVisible(true);
+    // formRef?.current?.resetFields();
   }
   const columns: ProColumns<TableListItem>[] = [
     {
       title: 'ID',
       dataIndex: 'id',
       tip: '唯一的 key',
+      className: 'idClass',
+      hideInTable: true,
     },
     {
       title: '姓名',
       dataIndex: 'name',
+      className: 'fullClass',
     },
     {
       title: '金额',
       dataIndex: 'amount',
+      className: 'fullClass',
     }, 
     {
       title: '手机号',
       dataIndex: 'phone',
+      className: 'fullClass',
     },{
       title: '银行名称',
       dataIndex: 'bankName',
+      className: 'fullClass',
     }, {
       title: '银行卡号',
       dataIndex: 'bankCode',
+      className: 'fullClass',
     }, {
       title: '状态',
       dataIndex: 'status',
+      className: 'fullClass',
     }, {
       title: '手续费',
       dataIndex: 'serviceCharge',
+      className: 'fullClass',
     },
     {
       title: '资金来源',
-      dataIndex: 'typeStr',
+      dataIndex: 'type',
+      className: 'fullClass',
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
+      className: 'fullClass',
     },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
+      className: 'fullClass',
       hideInDescriptions: true,
       render: (_, record) => [
-        <a
-          key="update"
-          onClick={() => {
-            handleUpdateRecord(record)
-          }}
-        >
-          修改
-        </a>,
+        <Popconfirm
+        title="确认删除？"
+        onConfirm={async () => {
+          handleUpdateRecord(record, 1);
+        }}
+        key="access"
+      >
+        <a key="access">
+        通过
+        </a>
+      </Popconfirm>,
         // eslint-disable-next-line react/jsx-key
         <Popconfirm
           title="确认删除？"
           onConfirm={async () => {
-            await handleRemove([record], actionRef);
+            handleUpdateRecord(record, 2);
           }}
           key="delete"
         >
           <a style={{ color: 'red' }} key="delete">
-            删除
+            驳回
           </a>
         </Popconfirm>,
       ],
@@ -193,22 +220,10 @@ const TableList: React.FC = () => {
             let status = '审核中'
             if (item.auditStatus == 1) {
               status = '通过'
-            } else {
+            } else if (item.auditStatus == 2) {
               status = '驳回'
             }
             item.status = status
-            let typeStr = '分红钱包'
-            if (item.type == 'bonus') {
-              typeStr = '分红钱包'
-            } else if (item.type == 'extend') {
-              typeStr = '推广钱包'
-            } else if (item.type == 'earnings') {
-              typeStr = '收益'
-            } else if (item.type == 'chnt') {
-              typeStr = '正泰补贴'
-            }
-            item.status = status
-            item.typeStr = typeStr
           })
           return {
             data: res?.data?.list || [],
