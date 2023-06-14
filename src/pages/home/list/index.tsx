@@ -94,6 +94,9 @@ const TableList: React.FC = () => {
     setLoading(true)
     rule({day: day}).then((res: any) => {
       if (res.code === 200) {
+        (res?.data?.userList || []).map((item: any) => {
+          item.num = item.num * 1
+        })
         setDataSource(res.data)
       }
       setLoading(false)
