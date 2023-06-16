@@ -11,6 +11,7 @@ export type TableListItem = {
   type: string;
   image: string;
   voucher: string;
+  state: number;
 };
 
 export type TableListPagination = {
