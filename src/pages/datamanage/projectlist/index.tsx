@@ -88,6 +88,7 @@ const TableList: React.FC = () => {
     {
       title: '每日社保补贴',
       dataIndex: 'dayEarnings',
+      hideInTable: type == 1 ? false : true,
     },
     {
       title: '是否售罄',
@@ -308,9 +309,11 @@ const TableList: React.FC = () => {
           <Form.Item label="价格">
             <Input type='number' value={currentRow?.price} onChange={(e) => handleChange(e.target.value, 'price')} placeholder='请输入价格'/>
           </Form.Item>
-          <Form.Item label="每日社保补贴">
+          {
+            type == 1 ? <Form.Item label="每日社保补贴">
             <Input type='number' value={currentRow?.dayEarnings} onChange={(e) => handleChange(e.target.value, 'dayEarnings')} placeholder='请输入每日社保补贴'/>
-          </Form.Item>
+          </Form.Item> : null
+          }
           <Form.Item label="是否售罄">
             <Radio.Group value={currentRow?.state} size="middle" onChange={(e) => handleChange(e.target.value, 'state')} buttonStyle="solid">
               <Radio value={1}>否</Radio>
