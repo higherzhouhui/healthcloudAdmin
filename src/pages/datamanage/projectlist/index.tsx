@@ -2,7 +2,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Form, Image, Input, message, Modal, Popconfirm, Radio, Switch } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Popconfirm, Radio } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { TableListItem, TableListPagination } from './data';
 import { addRule, removeRule, rule } from './service';
@@ -82,8 +82,13 @@ const TableList: React.FC = () => {
       dataIndex: 'price',
     },
     {
-      title: type == 1 ? '数字人民币' : '详情',
-      dataIndex: type == 1 ? 'chntSubsidy' : 'showDetail',
+      title: '数字人民币',
+      dataIndex: 'chntSubsidy',
+    },
+    {
+      title: '详情',
+      dataIndex: 'showDetail',
+      hideInTable: type == 1 ? true : false,
     },
     {
       title: '每日社保补贴',
@@ -320,11 +325,10 @@ const TableList: React.FC = () => {
               <Radio value={0}>是</Radio>
             </Radio.Group>
           </Form.Item>
-          {
-            type == 1 ? <Form.Item label="数字人民币">
+          <Form.Item label={type == 1 ? "数字人民币" : "赠送数字人民币"}>
             <Input type='number' value={currentRow?.chntSubsidy} onChange={(e) => handleChange(e.target.value, 'chntSubsidy')} placeholder='请输正泰补贴'/>
-          </Form.Item> : <Form.Item label='详情'><WangEditor description={currentRow?.details || ''} onChange={(e) => handleChange(e, 'details')} /></Form.Item>
-          }
+          </Form.Item> 
+          <Form.Item label='详情'><WangEditor description={currentRow?.details || ''} onChange={(e) => handleChange(e, 'details')} /></Form.Item>
         </ProForm>
       </Modal>
     </PageContainer>

@@ -19,6 +19,7 @@ const TableList: React.FC = () => {
     {title: '团队第二层奖励', key: 'groupTwo', vlaue: ''},
     {title: '团队第三层奖励', key: 'groupThree', vlaue: ''},
     {title: 'id', key: 'id', hide: true, value: ''},
+    {title: '分红比例', key: 'equityBonus', value: ''},
     {title: '教程', key: 'course', vlaue: '', hide: true},
     {title: '推广规则', key: 'expandRule', vlaue: '', hide: true},
   ])
