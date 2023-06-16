@@ -9,21 +9,21 @@
 export default {
   dev: {
     '/admin/': {
-      target: 'http://api.jianxiangyunbao.com/',
+      target: 'http://api.jianxiangyunbao.com',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
   },
   test: {
     '/admin/': {
-      target: 'http://api.jianxiangyunbao.com/',
+      target: 'http://api.jianxiangyunbao.com',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
   },
   pre: {
     '/none/': {
-      target: 'http://api.jianxiangyunbao.com/',
+      target: 'http://api.jianxiangyunbao.com',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
