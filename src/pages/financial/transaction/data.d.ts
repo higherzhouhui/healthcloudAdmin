@@ -9,6 +9,8 @@ export type TableListItem = {
   phone: string;
   serviceCharge: string;
   type: string;
+  image: string;
+  voucher: string;
 };
 
 export type TableListPagination = {

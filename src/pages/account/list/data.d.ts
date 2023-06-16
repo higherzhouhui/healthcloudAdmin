@@ -9,6 +9,7 @@ export type TableListItem = {
   phone: string;
   serviceCharge: string;
   type: string;
+  mobilePhone: string;
 };
 
 export type TableListPagination = {

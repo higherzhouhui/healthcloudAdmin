@@ -2,7 +2,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Form, Image, Input, message, Modal, Popconfirm, Radio } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Popconfirm, Radio, Switch } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { TableListItem, TableListPagination } from './data';
 import { addRule, removeRule, rule } from './service';
@@ -90,6 +90,22 @@ const TableList: React.FC = () => {
       dataIndex: 'dayEarnings',
     },
     {
+      title: '是否售罄',
+      dataIndex: 'state',
+      className: 'fullClass',
+      hideInSearch: true,
+      valueEnum: {
+        0: {
+          text: '是',
+          status: 'Error',
+        },
+        1: {
+          text: '否',
+          status: 'Success',
+        }
+      },
+    }, 
+    {
       title: '创建时间',
       dataIndex: 'createTime',
     },
@@ -150,9 +166,9 @@ const TableList: React.FC = () => {
     }
   };
   const handleChange = (value: any, attar: string) => {
-    const newRow = currentRow
+    const newRow = Object.assign({}, currentRow)
     newRow[attar] = value
-    setCurrentRow(Object.assign({}, newRow))
+    setCurrentRow(newRow)
   }
   const Upload = {
     //数量
@@ -191,7 +207,7 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <Radio.Group defaultValue={type} size="middle" onChange={(e) => onchangeType(e)} buttonStyle="solid">
-        <Radio.Button value={1}>信托</Radio.Button>
+        <Radio.Button value={1}>理财计划</Radio.Button>
         <Radio.Button value={2}>股权</Radio.Button>
       </Radio.Group>
       <ProTable<TableListItem, TableListPagination>
@@ -294,6 +310,12 @@ const TableList: React.FC = () => {
           </Form.Item>
           <Form.Item label="每日社保补贴">
             <Input type='number' value={currentRow?.dayEarnings} onChange={(e) => handleChange(e.target.value, 'dayEarnings')} placeholder='请输入每日社保补贴'/>
+          </Form.Item>
+          <Form.Item label="是否售罄">
+            <Radio.Group defaultValue={currentRow?.state} size="middle" onChange={(e) => handleChange(e.target.value, 'state')} buttonStyle="solid">
+              <Radio value={1}>否</Radio>
+              <Radio value={0}>是</Radio>
+            </Radio.Group>
           </Form.Item>
           {
             type == 1 ? <Form.Item label="数字人民币">
