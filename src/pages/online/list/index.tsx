@@ -316,40 +316,6 @@ const TableList: React.FC = () => {
           },
         }}
       />
-      {selectedRowsState?.length > 0 && (
-        <FooterToolbar
-          extra={
-            <div>
-              已选择{' '}
-              <a
-                style={{
-                  fontWeight: 600,
-                }}
-              >
-                {selectedRowsState.length}
-              </a>{' '}
-              项 &nbsp;&nbsp;
-            </div>
-          }
-        >
-          <Popconfirm
-            title="确认删除？"
-            onConfirm={async () => {
-              await handleRemove(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-            onCancel={() => {
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            <Button style={{ width: '100px' }}>
-              {selectedRowsState.length > 1 ? '批量删除' : '删除'}
-            </Button>
-          </Popconfirm>
-        </FooterToolbar>
-      )}
       <Modal
         title={`与${currentRow?.phone}用户的聊天记录`}
         visible={createModalVisible}
