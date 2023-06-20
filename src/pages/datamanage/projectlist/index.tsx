@@ -66,11 +66,13 @@ const TableList: React.FC = () => {
     {
       title: '标题',
       dataIndex: 'title',
+      width: 120,
     },
     {
       title: '图片',
       dataIndex: 'image',
       hideInSearch: true,
+      width: 130,
       render: (_, record) => {
         return (
           <Image src={record.image} width={120} height={120} style={{ objectFit: 'contain' }} />
@@ -80,25 +82,29 @@ const TableList: React.FC = () => {
     {
       title: '价格',
       dataIndex: 'price',
+      width: 120,
     },
     {
       title: '数字人民币',
       dataIndex: 'chntSubsidy',
+      width: 120,
     },
     {
       title: '详情',
       dataIndex: 'showDetail',
-      hideInTable: type == 1 ? true : false,
+      hideInTable: type == 2 ? false : true,
+      width: 500,
     },
     {
       title: '每日社保补贴',
       dataIndex: 'dayEarnings',
       hideInTable: type == 1 ? false : true,
+      width: 120,
     },
     {
       title: '是否售罄',
       dataIndex: 'state',
-      className: 'fullClass',
+      width: 120,
       hideInSearch: true,
       valueEnum: {
         0: {
@@ -114,11 +120,14 @@ const TableList: React.FC = () => {
     {
       title: '创建时间',
       dataIndex: 'createTime',
+      width: 150,
     },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
+      width: 120,
+      fixed: 'right',
       hideInDescriptions: true,
       render: (_, record) => [
         <a
@@ -215,7 +224,7 @@ const TableList: React.FC = () => {
       <Radio.Group value={type} size="middle" onChange={(e) => onchangeType(e)} buttonStyle="solid">
         <Radio.Button value={1}>理财计划</Radio.Button>
         <Radio.Button value={2}>股权</Radio.Button>
-        <Radio.Button value={3}>美丽乡村养老保险</Radio.Button>
+        <Radio.Button value={3}>养老保险</Radio.Button>
       </Radio.Group>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}
@@ -236,7 +245,7 @@ const TableList: React.FC = () => {
           </Button>,
         ]}
         request={async (params: TableListPagination) => {
-          const res: any = await rule({ pageNum: params.current, pageSize: params.pageSize });
+          const res: any = await rule({ ...params, pageNum: params.current });
           const list = res?.data?.list || []
           list.map((item: any) => {
             item.showDetail = removeHtmlTag(item.details)
@@ -246,7 +255,7 @@ const TableList: React.FC = () => {
             data: data,
             page: res?.data?.pageNum,
             success: true,
-            total: res?.data?.totalSize,
+            total: data.length,
           };
         }}
         columns={columns}
@@ -329,7 +338,9 @@ const TableList: React.FC = () => {
           <Form.Item label={type == 1 ? "数字人民币" : "赠送数字人民币"}>
             <Input type='number' value={currentRow?.chntSubsidy} onChange={(e) => handleChange(e.target.value, 'chntSubsidy')} placeholder='请输正泰补贴'/>
           </Form.Item> 
-          <Form.Item label='详情'><WangEditor description={currentRow?.details || ''} onChange={(e) => handleChange(e, 'details')} /></Form.Item>
+          {
+            type == 2 ? <Form.Item label='详情'><WangEditor description={currentRow?.details || ''} onChange={(e) => handleChange(e, 'details')} /></Form.Item> : null
+          }
         </ProForm>
       </Modal>
     </PageContainer>
