@@ -212,9 +212,10 @@ const TableList: React.FC = () => {
   };
   return (
     <PageContainer>
-      <Radio.Group defaultValue={type} size="middle" onChange={(e) => onchangeType(e)} buttonStyle="solid">
+      <Radio.Group value={type} size="middle" onChange={(e) => onchangeType(e)} buttonStyle="solid">
         <Radio.Button value={1}>理财计划</Radio.Button>
         <Radio.Button value={2}>股权</Radio.Button>
+        <Radio.Button value={3}>美丽乡村养老保险</Radio.Button>
       </Radio.Group>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}

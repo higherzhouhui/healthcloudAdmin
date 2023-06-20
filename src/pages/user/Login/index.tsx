@@ -106,6 +106,7 @@ const Login: React.FC = () => {
                 name="userName"
                 fieldProps={{
                   size: 'large',
+                  maxLength: 11,
                   prefix: <UserOutlined className={styles.prefixIcon} />,
                 }}
                 placeholder={intl.formatMessage({
@@ -128,6 +129,7 @@ const Login: React.FC = () => {
                 name="password"
                 fieldProps={{
                   size: 'large',
+                  maxLength: 16,
                   prefix: <LockOutlined className={styles.prefixIcon} />,
                 }}
                 placeholder={intl.formatMessage({
