@@ -25,7 +25,7 @@ export async function getInitialState(): Promise<{
       const msg: any = await queryCurrentUser();
       let data;
       if (msg.code === 200) {
-        (msg?.data?.list || []).forEach(item => {
+        (msg?.data?.list || []).forEach((item: any) => {
           if (item.accountName === localStorage.getItem('accountName')) {
             data = item
           }

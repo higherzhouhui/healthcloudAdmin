@@ -96,7 +96,7 @@ const TableList: React.FC = () => {
       </div>
       <div className={styles.submit}>
         <Button type='primary' size='large' loading={loading} onClick={() => handleOk()} style={{marginRight: '30px'}}>确定</Button>
-        <Button type='primary' size='large' loading={loading} onClick={() => initData()}>重置</Button>
+        <Button type='default' size='large' loading={loading} onClick={() => initData()}>重置</Button>
       </div>
     </PageContainer>
   );

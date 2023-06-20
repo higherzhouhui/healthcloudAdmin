@@ -51,7 +51,7 @@ export async function currentUser(options?: { [key: string]: any }) {
   // const { initialState } = useModel('@@initialState');
   return request<{
     data: API.CurrentUser;
-  }>(`/admin/administer/getPageList?pageNum=1&pageSize=100`, {
+  }>(`/admin/administer/getPageList?pageNum=1&pageSize=50`, {
     method: 'GET',
     ...(options || {}),
   });
