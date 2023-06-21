@@ -1,17 +1,15 @@
-import { PlusOutlined } from '@ant-design/icons';
-import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import ProDescriptions from '@ant-design/pro-descriptions';
+import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Drawer, Form, Image, Input, message, Modal, Popconfirm } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Popconfirm } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/UpdateForm';
-import UpdateForm from './components/UpdateForm';
 import type { TableListItem, TableListPagination } from './data';
-import { addRule, removeRule, rule, updateRule } from './service';
+import { addRule, removeRule, rule, updateRule, getExpandrule, updateExpandRule } from './service';
 import ProForm, { ProFormUploadButton } from '@ant-design/pro-form';
 import { request } from 'umi';
+import WangEditor from '@/components/Editor';
 /**
  * 更新节点
  *
@@ -73,6 +71,8 @@ const TableList: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<TableListItem | any>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
   const formRef = useRef<any>()
+  const [awardRuleVisible, setAwardRuleVisible] = useState(false)
+  const [baseInfo, setbaseInfo] = useState<any>({})
   const handleUpdateRecord = (record: TableListItem) => {
     setCurrentRow(record);
     handleModalVisible(true);
@@ -164,9 +164,9 @@ const TableList: React.FC = () => {
     }
   };
   const handleChange = (value: any, attar: string) => {
-    const newRow = currentRow
+    const newRow = Object.assign({}, currentRow)
     newRow[attar] = value
-    setCurrentRow(Object.assign({}, newRow))
+    setCurrentRow(newRow)
   }
   const Upload = {
     //数量
@@ -189,6 +189,26 @@ const TableList: React.FC = () => {
     },
   };
 
+  const editRule = () => {
+    setAwardRuleVisible(true)
+    getExpandrule().then(res => {
+      if (res.code === 200) {
+        setbaseInfo(res.data)
+      }
+    })
+  }
+
+  const handleEditRule = () => {
+    const hide = message.loading('正在修改中')
+    updateExpandRule(baseInfo).then(res => {
+      hide()
+      if (res.code === 200) {
+        setAwardRuleVisible(false)
+        message.success('修改成功')
+      }
+    })
+  }
+
   return (
     <PageContainer>
       <ProTable<TableListItem, TableListPagination>
@@ -200,9 +220,13 @@ const TableList: React.FC = () => {
           pageSize: 10,
         }}
         toolBarRender={() => [
-          <Button type="primary" key="primary" onClick={() => addNewNotice()}>
+          <Button type="primary" key="addnew" onClick={() => addNewNotice()}>
             <PlusOutlined />
             新增
+          </Button>,
+          <Button type="default" key="award" onClick={() => editRule()}>
+            <FormOutlined />
+            奖励规则
           </Button>,
         ]}
         request={async (params: TableListPagination) => {
@@ -270,11 +294,9 @@ const TableList: React.FC = () => {
               ...Upload,
             }}
           />
-          {
-            currentRow?.icon ? <Form.Item label="">
-            <Input value={currentRow?.icon} readOnly />
-          </Form.Item> : null
-          }
+          <Form.Item label="">
+            <Input value={currentRow?.icon} onChange={(e) => handleChange(e.target.value, 'icon')} />
+          </Form.Item>
           <Form.Item label="邀请人数">
             <Input type='number' value={currentRow?.inviteNum} onChange={(e) => handleChange(e.target.value, 'inviteNum')} placeholder='请输入邀请人数'/>
           </Form.Item>
@@ -282,6 +304,16 @@ const TableList: React.FC = () => {
             <Input type='number' value={currentRow?.amount} onChange={(e) => handleChange(e.target.value, 'amount')} placeholder='请输入奖励'/>
           </Form.Item>
         </ProForm>
+      </Modal>
+
+      <Modal
+        title="奖励规则"
+        width={600}
+        visible={awardRuleVisible}
+        onOk={handleEditRule}
+        onCancel={() => setAwardRuleVisible(false)}
+      >
+        <WangEditor description={baseInfo?.expandRule || ''} onChange={(value) => setbaseInfo({...baseInfo, expandRule: value})} />
       </Modal>
     </PageContainer>
   );

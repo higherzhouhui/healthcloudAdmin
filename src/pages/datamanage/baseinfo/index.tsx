@@ -90,10 +90,10 @@ const TableList: React.FC = () => {
         <h2>教程</h2>
         <WangEditor description={baseInfo[baseInfo.length - 2].value || ''} onChange={(e) => handleChange(e, baseInfo[baseInfo.length - 2].key || '')}/>
       </div>
-      <div className='tuiguang'>
+      {/* <div className='tuiguang'>
         <h2>推广规则</h2>
         <WangEditor description={baseInfo[baseInfo.length - 1].value || ''} onChange={(e) => handleChange(e, baseInfo[baseInfo.length - 1].key || '')}/>
-      </div>
+      </div> */}
       <div className={styles.submit}>
         <Button type='primary' size='large' loading={loading} onClick={() => handleOk()} style={{marginRight: '30px'}}>确定</Button>
         <Button type='default' size='large' loading={loading} onClick={() => initData()}>重置</Button>
