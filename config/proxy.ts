@@ -8,14 +8,14 @@
  */
 export default {
   dev: {
-    '/admin/': {
+    '/none/': {
       target: 'http://api.jianxiangyunbao.com',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
   },
   test: {
-    '/admin/': {
+    '/none/': {
       target: 'http://api.jianxiangyunbao.com',
       changeOrigin: true,
       pathRewrite: { '^': '' },

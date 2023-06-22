@@ -1,5 +1,5 @@
 import { PageContainer } from '@ant-design/pro-layout';
-import { Button, Input, message} from 'antd';
+import { Button, Input, Switch, message} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { updateRule, rule } from './service';
 import styles from './style.less'
@@ -13,6 +13,8 @@ const TableList: React.FC = () => {
     {title: '官方群名称', key: 'groupName', vlaue: ''},
     {title: '官方群号', key: 'groupNum', vlaue: ''},
     {title: '官方群二维码', key: 'officialGroup', vlaue: ''},
+    {title: '人民币转账', key: 'rmbTransfer', vlaue: '', swith: true},
+    {title: '签到奖励金', key: 'signInMoney', vlaue: ''},
     {title: '团队冻结天数', key: 'groupFreezeDay', vlaue: ''},
     {title: '团队冻结比例', key: 'groupFreezeRatio', vlaue: ''},
     {title: '团队第一层奖励', key: 'groupOne', vlaue: ''},
@@ -81,7 +83,9 @@ const TableList: React.FC = () => {
           baseInfo.map(item => {
             return !item.hide ? <div className={styles.formItem} key={item.key}>
             <div className={styles.label}>{item.title}</div>
-              <Input value={item.value} onChange={(e) => handleChange(e.target.value, item.key)} placeholder={`请输入${item.title}`}/>
+              {
+                item.swith ? <Switch checked={item.value} onChange={(value) => handleChange(value, item.key)} /> : <Input value={item.value} onChange={(e) => handleChange(e.target.value, item.key)} placeholder={`请输入${item.title}`}/>
+              }
           </div> : null
           })
         }
