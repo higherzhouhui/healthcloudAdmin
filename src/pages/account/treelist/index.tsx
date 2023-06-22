@@ -121,7 +121,7 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: '下级会员',
+      title: '推荐总人数',
       dataIndex: 'totalChildren',
       width: 110,
       tooltip: '点击可查看下级会员',
@@ -370,16 +370,17 @@ const TableList: React.FC = () => {
           collapsed: false,
           collapseRender: () => false,
         }}
-        pagination={{
-          pageSize: 10,
-          current: 1
-        }}
+        // pagination={{
+        //   pageSize: 10,
+        //   current: 1
+        // }}
+        pagination={false}
         scroll={{
           x: 1800,
           y: document.body.clientHeight - 350,
         }}
         request={async (params: TableListPagination) => {
-          const res: any = await rule({ ...params, pageNum: params.current, pageSize: 10 });
+          const res: any = await rule({ ...params, pageNum: 1, pageSize: 99999 });
           // (res?.data?.list || []).map((item: any) => {
           //   let registerType = 'APP注册';
           //   if (item.registerType == 2) {
@@ -388,7 +389,7 @@ const TableList: React.FC = () => {
           //   item.registerType = registerType;
           // });
           let data: any = [];
-          data = res?.data?.list
+          data = buildTree(res?.data?.list || []);
           setTotal(res?.data?.totalSize);
           return {
             data: data,

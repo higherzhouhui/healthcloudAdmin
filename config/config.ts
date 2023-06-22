@@ -73,6 +73,12 @@ export default defineConfig({
           access: 'adminRouteFilter',
         },
         {
+          name: 'account-treeList',
+          path: '/account/treeList',
+          component: './account/treelist',
+          access: 'adminRouteFilter',
+        },
+        {
           name: 'account-children',
           path: '/account/children',
           component: './account/children',

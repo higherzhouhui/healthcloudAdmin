@@ -43,6 +43,7 @@ export default {
   'menu.upload.upload-upload': '上传文件',
   'menu.account': '会员管理',
   'menu.account.account-list': '会员列表',
+  'menu.account.account-treeList': '会员(层级结构)',
   'menu.account.account-children': '下级会员列表',
   'menu.progress': 'Mint管理',
   'menu.progress.progress-list': '成功列表',
