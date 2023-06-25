@@ -8,15 +8,15 @@
  */
 export default {
   dev: {
-    '/none/': {
-      target: 'http://api.jianxiangyunbao.com',
+    '/admin/': {
+      target: 'http://47.242.197.116:8082',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },
   },
   test: {
-    '/none/': {
-      target: 'http://api.jianxiangyunbao.com',
+    '/admin/': {
+      target: 'http://47.242.197.116:8082',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

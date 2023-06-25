@@ -19,9 +19,9 @@ request.interceptors.request.use((url, options) => {
   // 本地访问需要做代理，否则会跨域；线上生成由于ng没有反向代理，就直连接口，而且是同一个域下的
   const { NODE_ENV } = process.env;
   let before = 'http://api.jianxiangyunbao.cc'
-  // if (NODE_ENV === 'development') {
-  //   before = ''
-  // }
+  if (NODE_ENV === 'development') {
+    before = ''
+  }
   return {
     url: `${before}${url}`,
     options: options,
