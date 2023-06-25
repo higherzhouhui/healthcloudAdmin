@@ -4,6 +4,8 @@ import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import RightContent from '@/components/RightContent';
 import { currentUser as queryCurrentUser } from './services/login/api';
+import TagView from '@/components/TagView';
+
 import './global.less'
 const loginPath = '/user/login';
 
@@ -65,6 +67,20 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       }
     },
     menuHeaderRender: undefined,
+    contentStyle: {
+      paddingTop: '40px',
+    },
+    childrenRender: (children) => {
+      return (
+        <>
+          {initialState?.currentUser && location.pathname !== loginPath ? (
+            <TagView home="/online/list" >{children}</TagView>
+          ) : (
+            children
+          )}
+        </>
+      );
+    },
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     ...initialState?.settings,
