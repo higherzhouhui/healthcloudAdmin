@@ -170,9 +170,6 @@ export default defineConfig({
           component: './datamanage/version',
           access: 'adminRouteFilter',
         },
-        {
-          component: '404',
-        },
       ],
     },
     {
@@ -278,9 +275,6 @@ export default defineConfig({
           component: './admins/changepwd-result',
           hideInMenu: true,
           access: 'adminRouteFilter',
-        },
-        {
-          component: '404',
         },
       ],
     },
