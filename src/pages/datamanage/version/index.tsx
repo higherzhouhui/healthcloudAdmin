@@ -1,13 +1,11 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
+import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Form, Image, Input, message, Modal, Popconfirm } from 'antd';
+import { Form, Input, message, Modal, Switch } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { TableListItem, TableListPagination } from './data';
 import { addRule, removeRule, rule } from './service';
-import ProForm, { ProFormUploadButton } from '@ant-design/pro-form';
-import { request } from 'umi';
+import ProForm from '@ant-design/pro-form';
 
 /**
  * 删除节点
@@ -73,7 +71,7 @@ const TableList: React.FC = () => {
       dataIndex: 'downUrl',
     },
     {
-      title: '是否强制',
+      title: '是否强更',
       dataIndex: 'isCompelStr',
     },
     {
@@ -93,6 +91,7 @@ const TableList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       hideInDescriptions: true,
+      fixed: 'right',
       render: (_, record) => [
         <a
           key="update"
@@ -180,6 +179,10 @@ const TableList: React.FC = () => {
           </Form.Item>
           <Form.Item label="版本号">
             <Input value={currentRow?.version} onChange={(e) => handleChange(e.target.value, 'version')} placeholder='请输入版本号'/>
+          </Form.Item>
+          <Form.Item label="是否强更">
+            <Switch checked={currentRow?.isCompel} onChange={(e) => handleChange(e, 'isCompel')} />
+            {/* <Input.TextArea rows={3} value={currentRow?.describe} onChange={(e) => handleChange(e.target.value, 'describe')} placeholder='请输入更新描述'/> */}
           </Form.Item>
         </ProForm>
       </Modal>

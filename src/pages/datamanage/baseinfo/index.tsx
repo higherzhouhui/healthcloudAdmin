@@ -14,14 +14,16 @@ const TableList: React.FC = () => {
     {title: '官方群号', key: 'groupNum', vlaue: ''},
     {title: '官方群二维码', key: 'officialGroup', vlaue: ''},
     {title: '人民币转账', key: 'rmbTransfer', vlaue: '', swith: true},
-    {title: '签到奖励金', key: 'signInMoney', vlaue: ''},
+    {title: '每日签到奖励金', key: 'signInMoney', vlaue: '', type: 'number'},
+    {title: '推荐赠送金', key: 'recommend', vlaue: '', type: 'number'},
+    {title: '注册赠送金', key: 'register', vlaue: '', type: 'number'},
     // {title: '团队冻结天数', key: 'groupFreezeDay', vlaue: ''},
     // {title: '团队冻结比例', key: 'groupFreezeRatio', vlaue: ''},
-    {title: '团队第一层奖励', key: 'groupOne', vlaue: ''},
-    {title: '团队第二层奖励', key: 'groupTwo', vlaue: ''},
-    {title: '团队第三层奖励', key: 'groupThree', vlaue: ''},
+    {title: '团队第一层奖励', key: 'groupOne', vlaue: '', type: 'number'},
+    {title: '团队第二层奖励', key: 'groupTwo', vlaue: '', type: 'number'},
+    {title: '团队第三层奖励', key: 'groupThree', vlaue: '', type: 'number'},
     {title: 'id', key: 'id', hide: true, value: ''},
-    {title: '分红比例', key: 'equityBonus', value: ''},
+    {title: '分红比例', key: 'equityBonus', value: '', type: 'number'},
     {title: '兑换规则', key: 'exchange', value: ''},
     {title: '教程', key: 'course', vlaue: '', hide: true},
     {title: '推广规则', key: 'expandRule', vlaue: '', hide: true},
@@ -87,7 +89,7 @@ const TableList: React.FC = () => {
             return !item.hide ? <div className={styles.formItem} key={item.key}>
             <div className={styles.label}>{item.title}</div>
               {
-                item.swith ? <Switch checked={item.value} onChange={(value) => handleChange(value, item.key)} /> : <Input value={item.value} onChange={(e) => handleChange(e.target.value, item.key)} placeholder={`请输入${item.title}`}/>
+                item.swith ? <Switch checked={item.value} onChange={(value) => handleChange(value, item.key)} /> : <Input value={item.value} type={item.type || 'text'} onChange={(e) => handleChange(e.target.value, item.key)} placeholder={`请输入${item.title}`}/>
               }
           </div> : null
           })
