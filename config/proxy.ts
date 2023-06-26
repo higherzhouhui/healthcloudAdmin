@@ -8,22 +8,22 @@
  */
 export default {
   dev: {
-    '/admin/': {
-      target: 'http://47.242.197.116:8082',
+    '/admin-service/': {
+      target: 'http://47.242.197.116:8000',
       changeOrigin: true,
-      pathRewrite: { '^': '' },
+      pathRewrite: { '^admin-service': '' },
     },
   },
   test: {
-    '/admin/': {
-      target: 'http://47.242.197.116:8082',
+    '/admin-service/': {
+      target: 'http://47.242.197.116:8000',
       changeOrigin: true,
-      pathRewrite: { '^': '' },
+      pathRewrite: { '^admin-service': '' },
     },
   },
   pre: {
     '/none/': {
-      target: 'http://api.jianxiangyunbao.com',
+      target: 'http://47.242.197.116:8000',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

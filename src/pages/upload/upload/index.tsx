@@ -57,7 +57,6 @@ const UploadWings: FC<Record<string, any>> = () => {
           </div> : null
         }
         <ProForm
-          hideRequiredMark
           style={{ margin: 'auto', marginTop: 12, width: '100%', height: 'calc(100vh - 330px)' }}
           name="basic"
           layout="vertical"

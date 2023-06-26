@@ -22,6 +22,7 @@ const TableList: React.FC = () => {
     {title: '团队第三层奖励', key: 'groupThree', vlaue: ''},
     {title: 'id', key: 'id', hide: true, value: ''},
     {title: '分红比例', key: 'equityBonus', value: ''},
+    {title: '兑换规则', key: 'exchange', value: ''},
     {title: '教程', key: 'course', vlaue: '', hide: true},
     {title: '推广规则', key: 'expandRule', vlaue: '', hide: true},
   ])
@@ -42,9 +43,7 @@ const TableList: React.FC = () => {
       }
     })
   }
-  useEffect(() => {
-    initData()
-  }, [])
+
   const handleOk = async () => {
     const hide = message.loading(`正在更新`);
     const data = {}
@@ -75,6 +74,10 @@ const TableList: React.FC = () => {
     })
     setBaseInfo([...newBase])
   }
+
+  useEffect(() => {
+    initData()
+  }, [])
 
   return (
     <PageContainer subTitle='图片或者是视频文件请上传文件后将链接填入'>
