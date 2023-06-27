@@ -11,7 +11,7 @@ import ProForm from '@ant-design/pro-form';
 import style from './style.less';
 import { history } from 'umi';
 import * as XLSX from 'xlsx';
-import { DeleteOutlined, EditOutlined, FormOutlined, PartitionOutlined, TableOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, FormOutlined, TableOutlined } from '@ant-design/icons';
 const TableList: React.FC = () => {
   /** 分布更新窗口的弹窗 */
   const [showDetail, setShowDetail] = useState(false);
@@ -356,10 +356,10 @@ const TableList: React.FC = () => {
         actionRef={actionRef}
         rowKey="mobilePhone"
         dateFormatter="string"
-        id="myTable"
+        id="accountListIndex"
         headerTitle={`总会员：${total}`}
         toolBarRender={() => [
-          <Button type="primary" key="primary" onClick={() => export2Excel('myTable', '会员列表')}>
+          <Button type="primary" key="primary" onClick={() => export2Excel('accountListIndex', '会员列表')}>
             <TableOutlined />
             导出Excel
           </Button>,
@@ -371,7 +371,6 @@ const TableList: React.FC = () => {
           collapseRender: () => false,
         }}
         pagination={{
-          pageSize: 10,
           current: 1
         }}
         scroll={{
@@ -379,7 +378,7 @@ const TableList: React.FC = () => {
           y: document.body.clientHeight - 350,
         }}
         request={async (params: TableListPagination) => {
-          const res: any = await rule({ ...params, pageNum: params.current, pageSize: 10 });
+          const res: any = await rule({ ...params, pageNum: params.current });
           // (res?.data?.list || []).map((item: any) => {
           //   let registerType = 'APP注册';
           //   if (item.registerType == 2) {

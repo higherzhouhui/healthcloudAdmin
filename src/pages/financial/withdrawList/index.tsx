@@ -1,4 +1,4 @@
-import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
+import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button, Form, Input, message, Modal, Popconfirm } from 'antd';
@@ -71,9 +71,9 @@ const TableList: React.FC = () => {
       title: 'ID',
       dataIndex: 'id',
       tip: '唯一的 key',
-      className: 'idClass',
-      hideInTable: true,
+      width: 120,
       hideInSearch: true,
+      hideInTable: true,
     },
     {
       title: '姓名',
@@ -234,24 +234,24 @@ const TableList: React.FC = () => {
     <PageContainer>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}
-        rowKey="id"
-        id='myTable'
-        toolBarRender={() => [
-          <Button type="primary" key="primary" onClick={() => export2Excel('myTable', '出款审核列表')}>
-            <TableOutlined />
-            导出Excel
-          </Button>,
-        ]}
+        rowKey="createTime"
+        id='withdrawListIndex'
         search={{
           labelWidth: 90,
           //隐藏展开、收起
           collapsed: false,
           collapseRender:()=>false,
         }}
-        dateFormatter="string"
         pagination={{
-          pageSize: 10,
+          current: 1
         }}
+        dateFormatter="string"
+        toolBarRender={() => [
+          <Button type="primary" key="primary" onClick={() => export2Excel('withdrawListIndex', '出款审核列表')}>
+            <TableOutlined />
+            导出Excel
+          </Button>,
+        ]}
         scroll={{
           x: 1400,
           y: document?.body?.clientHeight - 390,
@@ -267,19 +267,21 @@ const TableList: React.FC = () => {
           //   }
           //   item.status = status
           // })
+          let data: any = [];
+          data = res?.data?.list
           return {
-            data: res?.data?.list || [],
+            data: data,
             page: res?.data?.pageNum,
             success: true,
             total: res?.data?.totalSize,
           };
         }}
         columns={columns}
-        rowSelection={{
-          onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
-          },
-        }}
+        // rowSelection={{
+        //   onChange: (_, selectedRows) => {
+        //     setSelectedRows(selectedRows);
+        //   },
+        // }}
       />
       <Modal
         title={currentRow?.id ? '修改' : '新增'}

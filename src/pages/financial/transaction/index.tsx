@@ -242,30 +242,30 @@ const TableList: React.FC = () => {
     <PageContainer>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}
-        rowKey="id"
+        rowKey="createTime"
+        pagination={{
+          current: 1
+        }}
         search={{
           labelWidth: 90,
           //隐藏展开、收起
           collapsed: false,
           collapseRender:()=>false,
         }}
-        id='myTable'
+        id='transactionIndex'
         toolBarRender={() => [
-          <Button type="primary" key="primary" onClick={() => export2Excel('myTable', '订单列表')}>
+          <Button type="primary" key="primary" onClick={() => export2Excel('transactionIndex', '订单列表')}>
             <TableOutlined />
             导出Excel
           </Button>,
         ]}
         dateFormatter="string"
-        pagination={{
-          pageSize: 10,
-        }}
         scroll={{
           x: 1400,
           y: document?.body?.clientHeight - 470,
         }}
         request={async (params: any) => {
-          const res: any = await rule({ pageNum: params.current, ...params });
+          const res: any = await rule({ ...params, pageNum: params.current });
           // (res?.data?.list || []).map((item: any) => {
           //   let status = '审核中'
           //   if (item.state == 1) {
@@ -282,19 +282,21 @@ const TableList: React.FC = () => {
           //   item.payType = payType
           //   item.status = status
           // })
+          let data: any = [];
+          data = res?.data?.list
           return {
-            data: res?.data?.list || [],
+            data: data,
             page: res?.data?.pageNum,
             success: true,
             total: res?.data?.totalSize,
           };
         }}
         columns={columns}
-        rowSelection={{
-          onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
-          },
-        }}
+        // rowSelection={{
+        //   onChange: (_, selectedRows) => {
+        //     setSelectedRows(selectedRows);
+        //   },
+        // }}
       />
       <Modal
         title={currentRow?.id ? '修改' : '新增'}
