@@ -484,7 +484,7 @@ const TableList: React.FC = () => {
               compareHaveNesMessage(res?.data?.list || []);
             }
             return {
-              data: res?.data?.list || [],
+              data: ([...res?.data?.list || []]),
               page: res?.data?.pageNum,
               success: true,
               total: res?.data?.totalSize,
