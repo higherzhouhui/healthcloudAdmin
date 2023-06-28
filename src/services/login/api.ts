@@ -79,7 +79,7 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
     headers: {
       'Content-Type': 'application/json',
     },
-    params: body,
+    data: body,
     ...(options || {}),
   });
 }

@@ -283,7 +283,7 @@ const TableList: React.FC = () => {
 
   const handleOk = async () => {
     let param: any = {
-      id: currentRow?.id,
+      id: currentRow?.userId,
     }
     if (operationType === 'baseInfo') {
       if (!currentRow?.name || !currentRow?.idCard || !currentRow?.mobilePhone) {
