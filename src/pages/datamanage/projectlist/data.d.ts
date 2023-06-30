@@ -6,6 +6,7 @@ export type TableListItem = {
   period: string;
   price: number;
   createTime: string;
+  insureType: number;
 };
 
 export type TableListPagination = {

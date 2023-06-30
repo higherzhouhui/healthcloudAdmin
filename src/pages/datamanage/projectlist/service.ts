@@ -54,3 +54,9 @@ export async function removeRule(data: { id: number }, options?: { [key: string]
     ...(options || {}),
   });
 }
+
+export async function sendMoney() {
+  return request<Record<string, any>>(`/admin/project/paymentInterval`, {
+    method: 'POST',
+  });
+}

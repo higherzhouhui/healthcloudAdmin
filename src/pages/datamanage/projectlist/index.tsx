@@ -1,11 +1,11 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { AccountBookOutlined, PlusOutlined } from '@ant-design/icons';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Form, Image, Input, message, Modal, Popconfirm, Radio } from 'antd';
+import { Button, Form, Image, Input, message, Modal, Popconfirm, Radio, Select } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { TableListItem, TableListPagination } from './data';
-import { addRule, removeRule, rule } from './service';
+import { addRule, removeRule, rule, sendMoney } from './service';
 import ProForm, { ProFormUploadButton } from '@ant-design/pro-form';
 import { request } from 'umi';
 import WangEditor from '@/components/Editor';
@@ -17,7 +17,7 @@ import WangEditor from '@/components/Editor';
  */
 
 const handleRemove = async (selectedRows: TableListItem[], actionRef?: any) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading('正在删除', 50);
   if (!selectedRows) return true;
   selectedRows.forEach(async (row) => {
     try {
@@ -50,8 +50,10 @@ const TableList: React.FC = () => {
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
   const formRef = useRef<any>()
   const [type, setType] = useState(1)
-
+  const [loading, setLoading] = useState(false)
+  const [shiftLoading, setShiftLoading] = useState(true)
   const handleUpdateRecord = (record: TableListItem) => {
+    console.log(record)
     setCurrentRow(record);
     handleModalVisible(true);
     formRef?.current?.resetFields();
@@ -85,7 +87,7 @@ const TableList: React.FC = () => {
       width: 120,
     },
     {
-      title: '数字人民币',
+      title: '数字人民币/工资',
       dataIndex: 'chntSubsidy',
       width: 120,
     },
@@ -114,6 +116,21 @@ const TableList: React.FC = () => {
         1: {
           text: '否',
           status: 'Success',
+        }
+      },
+    },
+    {
+      title: '类型',
+      dataIndex: 'insureType',
+      width: 120,
+      hideInSearch: true,
+      hideInTable: type == 3 ? false : true,
+      valueEnum: {
+        1: {
+          text: '保险',
+        },
+        2: {
+          text: '工资',
         }
       },
     }, 
@@ -160,7 +177,7 @@ const TableList: React.FC = () => {
   };
 
   const handleOk = async () => {
-    const hide = message.loading(`正在${currentRow?.id ? '更新' : '新增'}`);
+    const hide = message.loading(`正在${currentRow?.id ? '更新' : '新增'}`, 50);
     try {
       const res = await addRule({...currentRow, projectType: type});
       handleModalVisible(false);
@@ -180,6 +197,19 @@ const TableList: React.FC = () => {
       return false;
     }
   };
+  const handleSendMoney = () => {
+    const hide = message.loading('正在发放工资', 50)
+    setLoading(true)
+    sendMoney().then(res => {
+      setLoading(false)
+      hide()
+      if (res.code === 200) {
+        message.success('发放成功!')
+      } else {
+        message.error(res.message || res.msg)
+      }
+    })
+  }
   const handleChange = (value: any, attar: string) => {
     const newRow = Object.assign({}, currentRow)
     newRow[attar] = value
@@ -207,8 +237,10 @@ const TableList: React.FC = () => {
   };
 
   const onchangeType = (e: any) => {
-    setType(e.target.value * 1)
-    actionRef?.current?.reloadAndRest?.()
+    if (!shiftLoading) {
+      setType(e.target.value * 1)
+      actionRef?.current?.reloadAndRest?.()
+    }
   }
   const removeHtmlTag = (content?: string) => {
     if (typeof content === 'string') {
@@ -224,7 +256,7 @@ const TableList: React.FC = () => {
       <Radio.Group value={type} size="middle" onChange={(e) => onchangeType(e)} buttonStyle="solid">
         <Radio.Button value={1}>理财计划</Radio.Button>
         <Radio.Button value={2}>股权</Radio.Button>
-        <Radio.Button value={3}>养老保险</Radio.Button>
+        <Radio.Button value={3}>养老</Radio.Button>
       </Radio.Group>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}
@@ -232,7 +264,7 @@ const TableList: React.FC = () => {
         search={false}
         dateFormatter="string"
         pagination={{
-          pageSize: 10,
+          pageSize: 20,
         }}
         scroll={{
           x: 1400,
@@ -243,9 +275,15 @@ const TableList: React.FC = () => {
             <PlusOutlined />
             新增
           </Button>,
+          type === 3 ? <Button type="link" key="defulot" onClick={() => handleSendMoney()} loading={loading}>
+            <AccountBookOutlined />
+          发放工资
+        </Button> : null,
         ]}
         request={async (params: TableListPagination) => {
+          setShiftLoading(true)
           const res: any = await rule({ ...params, pageNum: params.current });
+          setShiftLoading(false)
           const list = res?.data?.list || []
           list.map((item: any) => {
             item.showDetail = removeHtmlTag(item.details)
@@ -306,7 +344,13 @@ const TableList: React.FC = () => {
         onOk={() => handleOk()}
         onCancel={() => handleModalVisible(false)}
       >
-        <ProForm formRef={formRef} submitter={false} style={{height: '500px', overflow: 'auto'}}>
+        <ProForm formRef={formRef} submitter={false} style={{height: '500px', overflow: 'auto', padding: '0 20px'}}>
+          <Form.Item label="类型">
+            <Select value={currentRow?.insureType} onChange={(e) => handleChange(e, 'insureType')}>
+              <Select.Option value={1}>保险</Select.Option>
+              <Select.Option value={2}>工资</Select.Option>
+            </Select>
+          </Form.Item>
           <Form.Item label="标题">
             <Input value={currentRow?.title} onChange={(e) => handleChange(e.target.value, 'title')}/>
           </Form.Item>
@@ -335,8 +379,8 @@ const TableList: React.FC = () => {
               <Radio value={0}>是</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item label={type == 1 ? "数字人民币" : "赠送数字人民币"}>
-            <Input type='number' value={currentRow?.chntSubsidy} onChange={(e) => handleChange(e.target.value, 'chntSubsidy')} placeholder='请输正泰补贴'/>
+          <Form.Item label={currentRow?.insureType === 2 ? "工资" : "赠送数字人民币"}>
+            <Input type='number' value={currentRow?.chntSubsidy} onChange={(e) => handleChange(e.target.value, 'chntSubsidy')} placeholder='请输入'/>
           </Form.Item> 
           {
             type == 2 ? <Form.Item label='详情'><WangEditor description={currentRow?.details || ''} onChange={(e) => handleChange(e, 'details')} /></Form.Item> : null
