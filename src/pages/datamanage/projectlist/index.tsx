@@ -345,12 +345,14 @@ const TableList: React.FC = () => {
         onCancel={() => handleModalVisible(false)}
       >
         <ProForm formRef={formRef} submitter={false} style={{height: '500px', overflow: 'auto', padding: '0 20px'}}>
-          <Form.Item label="类型">
+          {
+            type === 3 ?  <Form.Item label="类型">
             <Select value={currentRow?.insureType} onChange={(e) => handleChange(e, 'insureType')}>
               <Select.Option value={1}>保险</Select.Option>
               <Select.Option value={2}>工资</Select.Option>
             </Select>
-          </Form.Item>
+          </Form.Item> : null
+          }
           <Form.Item label="标题">
             <Input value={currentRow?.title} onChange={(e) => handleChange(e.target.value, 'title')}/>
           </Form.Item>
