@@ -3,17 +3,14 @@ import { Button, Input, Switch, message} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { updateRule, rule } from './service';
 import styles from './style.less'
+import WangEditor from '@/components/Editor';
 
 
 const TableList: React.FC = () => {
   const [baseInfo, setBaseInfo] = useState([
-    {title: '人民币转账', key: 'rmbTransfer', vlaue: '', swith: true},
-    {title: '每日签到奖励金', key: 'signInMoney', vlaue: '', type: 'number'},
-    {title: '推荐赠送金', key: 'recommend', vlaue: '', type: 'number'},
-    {title: '注册赠送金', key: 'register', vlaue: '', type: 'number'},
-    {title: 'id', key: 'id', hide: true, value: ''},
-    {title: '股权分红比例', key: 'equityBonus', value: '', type: 'number', after: '%'},
-    {title: '兑换规则', key: 'exchange', value: '', hide: localStorage.getItem('hui') ? false : true },
+    {title: '团队第一层奖励', key: 'groupOne', vlaue: '', type: 'number'},
+    {title: '团队第二层奖励', key: 'groupTwo', vlaue: '', type: 'number'},
+    {title: '团队第三层奖励', key: 'groupThree', vlaue: '', type: 'number'},
   ])
   const [loading, setLoading] = useState(false)
   const initData = () => {
@@ -24,11 +21,7 @@ const TableList: React.FC = () => {
         const data = res.data || {}
         const newBase = baseInfo
         newBase.forEach(item => {
-          if (item.key === 'equityBonus') {
-            item.value = String(data[item.key] * 100)
-          } else {
-            item.value = data[item.key]
-          }
+          item.value = data[item.key] * 100
         })
         setBaseInfo([...newBase])
       } else {
@@ -37,18 +30,11 @@ const TableList: React.FC = () => {
     })
   }
 
-  const handleOk = async (value?: any, attar?: string) => {
+  const handleOk = async () => {
     const hide = message.loading(`正在更新`, 50);
     const data = {}
     baseInfo.forEach(item => {
-      if (item.key === 'equityBonus') {
-        data[item.key] = Number(item.value) / 100
-      } else if (item.key === attar) {
-        data[item.key] = value
-      } else {
-        data[item.key] = item.value
-
-      }
+      data[item.key] = item.value / 100
     })
     try {
       const res = await updateRule(data);
@@ -73,9 +59,6 @@ const TableList: React.FC = () => {
       }
     })
     setBaseInfo([...newBase])
-    if (attar === 'rmbTransfer') {
-      handleOk(value, attar)
-    }
   }
 
   useEffect(() => {
@@ -89,17 +72,13 @@ const TableList: React.FC = () => {
           baseInfo.map(item => {
             return !item.hide ? <div className={styles.formItem} key={item.key}>
             <div className={styles.label}>{item.title}</div>
-              {
-                item.swith ? <Switch checked={item.value} onChange={(value) => handleChange(value, item.key)} /> : <Input value={item.value} type={item.type || 'text'} onChange={(e) => handleChange(e.target.value, item.key)} placeholder={`请输入${item.title}`} addonAfter={item.after}/>
-              }
+            <Input value={item.value} type={item.type || 'text'} onChange={(e) => handleChange(e.target.value, item.key)} placeholder={`请输入${item.title}`} addonAfter='%'/>
           </div> : null
           })
         }
       </div>
-  
-  
       <div className={styles.submit}>
-        <Button type='primary' size='large' loading={loading} onClick={() => handleOk()} style={{marginRight: '30px'}}>确定</Button>
+        <Button type='primary' size='large' loading={loading} onClick={() => handleOk()} style={{marginRight: '30px'}}>立即修改</Button>
         <Button type='default' size='large' loading={loading} onClick={() => initData()}>重置</Button>
       </div>
     </PageContainer>

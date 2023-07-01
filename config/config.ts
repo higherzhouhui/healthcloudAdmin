@@ -165,6 +165,30 @@ export default defineConfig({
           access: 'adminRouteFilter',
         },
         {
+          name: 'datamanage-course',
+          path: '/datamanage/course',
+          component: './datamanage/course',
+          access: 'adminRouteFilter',
+        },
+        {
+          name: 'datamanage-video',
+          path: '/datamanage/video',
+          component: './datamanage/video',
+          access: 'adminRouteFilter',
+        },
+        {
+          name: 'datamanage-guanfangqun',
+          path: '/datamanage/guanfangqun',
+          component: './datamanage/guanfangqun',
+          access: 'adminRouteFilter',
+        },
+        {
+          name: 'datamanage-team',
+          path: '/datamanage/team',
+          component: './datamanage/team',
+          access: 'adminRouteFilter',
+        },
+        {
           name: 'datamanage-version',
           path: '/datamanage/version',
           component: './datamanage/version',

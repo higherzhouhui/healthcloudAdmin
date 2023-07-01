@@ -66,6 +66,11 @@ const TableList: React.FC = () => {
       hideInTable: true,
     },
     {
+      title: '排序',
+      dataIndex: 'sort',
+      width: 60,
+    },
+    {
       title: '标题',
       dataIndex: 'title',
       width: 120,
@@ -289,6 +294,7 @@ const TableList: React.FC = () => {
             item.showDetail = removeHtmlTag(item.details)
           })
           const data = list.filter((item: any) => item.projectType == type)
+          data.sort((a: any,b: any) => {return a.sort - b.sort})
           return {
             data: data,
             page: res?.data?.pageNum,
@@ -345,6 +351,9 @@ const TableList: React.FC = () => {
         onCancel={() => handleModalVisible(false)}
       >
         <ProForm formRef={formRef} submitter={false} style={{height: '500px', overflow: 'auto', padding: '0 20px'}}>
+          <Form.Item label="排序（从小到大展示）">
+            <Input value={currentRow?.sort} onChange={(e) => handleChange(e.target.value, 'sort')}/>
+          </Form.Item>
           {
             type === 3 ?  <Form.Item label="类型">
             <Select value={currentRow?.insureType} onChange={(e) => handleChange(e, 'insureType')}>
