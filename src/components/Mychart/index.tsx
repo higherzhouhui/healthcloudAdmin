@@ -149,9 +149,12 @@ const MyChartBox: FC<Iprops> = memo((props) => {
   const timer = useRef<any>();
   const myEchart = useRef<any>(null);
   const isLoaded = useRef<any>(null);
+  const domRef = useRef<any>(null);
   const initializeAndMonitor = () => {
-    const dom = document.getElementById(id) as any;
-    myEchart.current?.dispose();
+    const dom = domRef?.current;
+    if (myEchart.current != null && myEchart.current != "" && myEchart.current != undefined){
+      myEchart.current.dispose();
+    }
     myEchart.current = echarts.init(dom);
     if (loading) {
       myEchart.current?.setOption(loadingOption);
@@ -191,9 +194,7 @@ const MyChartBox: FC<Iprops> = memo((props) => {
   }, [options, loading]);
 
   return (
-    <>
-      <div className={styles.myChart} {...props} id={id} style={style}/>
-    </>
+      <div ref={domRef} className={`${styles.myChart} ${id}`} {...props} id={id} />
   );
 });
 
