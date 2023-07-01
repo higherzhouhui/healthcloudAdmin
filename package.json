@@ -47,7 +47,6 @@
     "not ie <= 10"
   ],
   "dependencies": {
-    "@ant-design/charts": "^0.9.4",
     "@ant-design/icons": "^4.5.0",
     "@ant-design/pro-descriptions": "^1.6.8",
     "@ant-design/pro-form": "^1.18.3",
@@ -65,6 +64,7 @@
     "bizcharts": "^3.5.3-beta.0",
     "bizcharts-plugin-slider": "^2.1.1-beta.1",
     "classnames": "^2.2.6",
+    "echarts": "^5.4.2",
     "gg-editor": "^2.0.2",
     "js-md5": "^0.7.3",
     "lodash": "^4.17.11",

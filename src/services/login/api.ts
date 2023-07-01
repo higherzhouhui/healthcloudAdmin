@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { message } from 'antd';
 import request from 'umi-request';
+import { removePending, addPending } from './pending';
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
   let token = null;
@@ -26,6 +27,8 @@ request.interceptors.request.use((url, options) => {
   if (url.includes('upload-service')) {
     before = ''
   }
+  // removePending(options);
+  // addPending(options);
   return {
     url: `${baseUrl}${before}${url}`,
     options: options,
@@ -35,6 +38,7 @@ request.interceptors.request.use((url, options) => {
 // request拦截器, 改变url 或 options.
 request.interceptors.response.use(async (response, options) => {
   // let result;
+  // removePending(response);
   const data = await response.clone().json();
   if (data.code !== 200) {
     message.error(data.message || data.msg);

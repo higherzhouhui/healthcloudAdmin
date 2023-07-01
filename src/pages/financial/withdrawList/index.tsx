@@ -8,7 +8,8 @@ import { addRule, removeRule, rule, updateRule } from './service';
 import ProForm, { ProFormUploadButton } from '@ant-design/pro-form';
 import { request } from 'umi';
 import * as XLSX from 'xlsx'
-import { TableOutlined } from '@ant-design/icons';
+import { TableOutlined, UsbTwoTone } from '@ant-design/icons';
+import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 /**
  * 删除节点
  *
@@ -47,15 +48,25 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<TableListItem | any>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
+  const [showDetail, setShowDetail] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [type, setType] = useState(1)
   const formRef = useRef<any>()
-  const handleUpdateRecord = (record: TableListItem, type: number) => {
-    const hide = message.loading('正在操作中...');
+  const handleUpdateRecord = (record: TableListItem, ctype: number) => {
+    if (loading) {
+      return
+    }
+    const hide = message.loading('正在操作中...', 50);
+    setLoading(true)
     updateRule({
       id: record.id,
-      auditStatus: type
+      auditStatus: ctype
     }).then((res: any) => {
       hide();
+      setLoading(false)
       if (res.code === 200) {
+        setCurrentRow({})
+        setShowDetail(false)
         message.success('操作完成，即将刷新');
         actionRef.current?.reloadAndRest?.();
       }
@@ -65,6 +76,11 @@ const TableList: React.FC = () => {
     // setCurrentRow(record);
     // handleModalVisible(true);
     // formRef?.current?.resetFields();
+  }
+  const showDetailModal = (row: any, t: number) => {
+    setCurrentRow(row)
+    setShowDetail(true)
+    setType(t)
   }
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -145,29 +161,13 @@ const TableList: React.FC = () => {
       fixed: 'right',
       hideInDescriptions: true,
       render: (_, record) => [
-        record.auditStatus == 0 ? <Popconfirm
-        title="确认通过？"
-        onConfirm={async () => {
-          handleUpdateRecord(record, 1);
-        }}
-        key="access"
-      >
-        <a key="access">
-        通过
-        </a>
-      </Popconfirm> : null,
+        record.auditStatus == 0 ? <a key="access" onClick={() => showDetailModal(record, 1)}>
+        审核
+        </a> : null,
         // eslint-disable-next-line react/jsx-key
-        record.auditStatus == 0 ? <Popconfirm
-          title="确认驳回？"
-          onConfirm={async () => {
-            handleUpdateRecord(record, 2);
-          }}
-          key="delete"
-        >
-          <a style={{ color: 'red' }} key="delete">
-            驳回
-          </a>
-        </Popconfirm> : null,
+        record.auditStatus == 0 ? <a style={{ color: 'red' }} key="delete" onClick={() => showDetailModal(record, 2)}>
+        驳回
+      </a> : null,
       ],
     },
   ];
@@ -310,6 +310,32 @@ const TableList: React.FC = () => {
             <Input type='number' value={currentRow?.amount} onChange={(e) => handleChange(e.target.value, 'amount')}/>
           </Form.Item>
         </ProForm>
+      </Modal>
+      <Modal
+        width={600}
+        visible={showDetail}
+        title={'详情'}
+        onOk={() => handleUpdateRecord(currentRow, type)}
+        okText={type === 1 ? '通过' : '驳回'}
+        onCancel={() => {
+          setCurrentRow(undefined);
+          setShowDetail(false);
+        }}
+        closable={false}
+      >
+        {currentRow?.id && (
+          <ProDescriptions<API.RuleListItem>
+            column={2}
+            title={currentRow?.name}
+            request={async () => ({
+              data: currentRow || {},
+            })}
+            params={{
+              id: currentRow?.id,
+            }}
+            columns={columns as ProDescriptionsItemProps<API.RuleListItem>[]}
+          />
+        )}
       </Modal>
     </PageContainer>
   );

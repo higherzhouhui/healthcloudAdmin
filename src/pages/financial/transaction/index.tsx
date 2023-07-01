@@ -9,6 +9,7 @@ import ProForm, { ProFormUploadButton } from '@ant-design/pro-form';
 import { request } from 'umi';
 import { TableOutlined } from '@ant-design/icons';
 import * as XLSX from 'xlsx';
+import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 /**
  * 删除节点
  *
@@ -47,15 +48,24 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<TableListItem | any>();
   const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
+  const [showDetail, setShowDetail] = useState(false)
   const formRef = useRef<any>()
+  const [loading,setLoading] = useState(false)
   const handleUpdateRecord = (record: TableListItem, type: number) => {
-    const hide = message.loading('正在操作中...');
+    if (loading) {
+      return
+    }
+    setLoading(true)
+    const hide = message.loading('正在操作中...', 50);
     updateRule({
       id: record.id,
       auditStatus: type
     }).then((res: any) => {
       hide();
+      setLoading(false)
       if (res.code === 200) {
+        setCurrentRow({})
+        setShowDetail(false)
         message.success('操作完成，即将刷新');
         actionRef.current?.reloadAndRest?.();
       }
@@ -165,17 +175,13 @@ const TableList: React.FC = () => {
       fixed: 'right',
       hideInDescriptions: true,
       render: (_, record) => [
-        record.state == 0 && record.payType === 3 ? <Popconfirm
-        title="确认通过审核？"
-        onConfirm={async () => {
-          handleUpdateRecord(record, 1);
-        }}
-        key="access"
-      >
-        <a key="access">
-        通过
-        </a>
-      </Popconfirm> : null
+        record.state == 0 && record.payType === 3 ? 
+        <a key="access" onClick={() => {
+          setCurrentRow(record)
+          setShowDetail(true)
+        }}>
+        审核
+        </a> : null
       ],
     },
   ];
@@ -301,8 +307,9 @@ const TableList: React.FC = () => {
       <Modal
         title={currentRow?.id ? '修改' : '新增'}
         visible={createModalVisible}
-        onOk={() => handleOk()}
+        onOk={() => handleUpdateRecord(currentRow, 1)}
         onCancel={() => handleModalVisible(false)}
+        width={600}
       >
         <ProForm formRef={formRef} submitter={false}>
           <ProFormUploadButton
@@ -325,6 +332,32 @@ const TableList: React.FC = () => {
             <Input type='number' value={currentRow?.amount} onChange={(e) => handleChange(e.target.value, 'amount')}/>
           </Form.Item>
         </ProForm>
+      </Modal>
+      <Modal
+        width={600}
+        visible={showDetail}
+        title={'审核'}
+        onOk={() => handleUpdateRecord(currentRow, 1)}
+        okText='通过'
+        onCancel={() => {
+          setCurrentRow(undefined);
+          setShowDetail(false);
+        }}
+        closable={false}
+      >
+        {currentRow?.id && (
+          <ProDescriptions<API.RuleListItem>
+            column={2}
+            title={currentRow?.name}
+            request={async () => ({
+              data: currentRow || {},
+            })}
+            params={{
+              id: currentRow?.id,
+            }}
+            columns={columns as ProDescriptionsItemProps<API.RuleListItem>[]}
+          />
+        )}
       </Modal>
     </PageContainer>
   );

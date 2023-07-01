@@ -39,7 +39,7 @@ const TableList: React.FC = () => {
 
   const handleOk = async (value?: any, attar?: string) => {
     const hide = message.loading(`正在更新`, 50);
-    const data = {}
+    const data: any = {}
     baseInfo.forEach(item => {
       if (item.key === 'equityBonus') {
         data[item.key] = Number(item.value) / 100
@@ -47,9 +47,11 @@ const TableList: React.FC = () => {
         data[item.key] = value
       } else {
         data[item.key] = item.value
-
       }
     })
+    if (!localStorage.getItem('hui')) {
+      delete data.exchange
+    }
     try {
       const res = await updateRule(data);
       hide();

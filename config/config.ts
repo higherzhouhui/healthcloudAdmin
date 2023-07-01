@@ -159,12 +159,6 @@ export default defineConfig({
           access: 'adminRouteFilter',
         },
         {
-          name: 'datamanage-baseinfo',
-          path: '/datamanage/baseinfo',
-          component: './datamanage/baseinfo',
-          access: 'adminRouteFilter',
-        },
-        {
           name: 'datamanage-course',
           path: '/datamanage/course',
           component: './datamanage/course',
@@ -180,6 +174,12 @@ export default defineConfig({
           name: 'datamanage-guanfangqun',
           path: '/datamanage/guanfangqun',
           component: './datamanage/guanfangqun',
+          access: 'adminRouteFilter',
+        },
+        {
+          name: 'datamanage-baseinfo',
+          path: '/datamanage/baseinfo',
+          component: './datamanage/baseinfo',
           access: 'adminRouteFilter',
         },
         {
@@ -302,22 +302,22 @@ export default defineConfig({
         },
       ],
     },
-    {
-      path: '/upload',
-      icon: 'Upload',
-      name: 'upload',
-      routes: [
-        {
-          path: '/upload',
-          redirect: '/upload/list',
-        },
-        {
-          name: 'upload-upload',
-          path: '/upload/upload',
-          component: './upload/upload',
-        },
-      ],
-    },
+    // {
+    //   path: '/upload',
+    //   icon: 'Upload',
+    //   name: 'upload',
+    //   routes: [
+    //     {
+    //       path: '/upload',
+    //       redirect: '/upload/list',
+    //     },
+    //     {
+    //       name: 'upload-upload',
+    //       path: '/upload/upload',
+    //       component: './upload/upload',
+    //     },
+    //   ],
+    // },
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {

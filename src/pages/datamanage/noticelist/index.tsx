@@ -11,6 +11,7 @@ import UpdateForm from './components/UpdateForm';
 import type { TableListItem, TableListPagination } from './data';
 import { addRule, removeRule, rule, updateRule } from './service';
 import './style.less';
+import WangEditor from '@/components/Editor';
 /**
  * 更新节点
  *
@@ -79,25 +80,26 @@ const TableList: React.FC = () => {
       title: 'ID',
       dataIndex: 'id',
       tip: '唯一的 key',
-      className: 'fullClass',
+      width: 120,
       hideInTable: true,
     },
     {
       title: '内容',
       dataIndex: 'content',
-      className: 'textAreaClass'
+      width: 500,
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
-      className: 'fullClass',
+      width: 150,
       valueType: 'dateTime'
     },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      className: 'fullClass',
+      width: 100,
+      fixed: 'right',
       hideInDescriptions: true,
       render: (_, record) => [
         <a
@@ -153,9 +155,17 @@ const TableList: React.FC = () => {
       return false;
     }
   }
-
-  const handInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value)
+  const removeHtmlTag = (c?: string) => {
+    if (typeof c === 'string') {
+      const reg = new RegExp('<[^>]*>', 'g');
+      let tStr = c.replace(reg, '');
+      tStr = tStr?.replace('&nbsp;', ''); // 过滤空格
+      return tStr;
+    }
+    return '';
+  };
+  const handInputChange = (e: string) => {
+    setContent(e)
   }
   return (
     <PageContainer>
@@ -164,9 +174,7 @@ const TableList: React.FC = () => {
         rowKey="id"
         search={false}
         dateFormatter="string"
-        pagination={{
-          pageSize: 10,
-        }}
+        pagination={false}
         toolBarRender={() => [
           <Button type="primary" key="primary" onClick={() => addNewNotice()}>
             <PlusOutlined />
@@ -174,12 +182,10 @@ const TableList: React.FC = () => {
           </Button>,
         ]}
         request={async (params: TableListPagination) => {
-          const res: any = await rule({ pageNum: params.current, pageSize: params.pageSize });
-          // res?.data?.list.map((row: any) => {
-          //   row.create_time = row.create_time * 1000;
-          //   row.minted = row.minted ? 1 : 2;
-          //   row.path = row.path.substr(row.path.indexOf('//'));
-          // });
+          const res: any = await rule({ pageNum: 1, pageSize: 10 });
+          res?.data?.list.map((row: any) => {
+            row.content = removeHtmlTag(row.content)
+          });
           return {
             data: res?.data?.list || [],
             page: res?.data?.pageNum,
@@ -235,7 +241,8 @@ const TableList: React.FC = () => {
         onOk={() => handleOk()}
         onCancel={() => handleModalVisible(false)}
       >
-        <Input.TextArea rows={4} placeholder="请输入公告内容" maxLength={1000} value={content} onChange={(e) => handInputChange(e)}/>
+        <WangEditor description={content} onChange={(e) => handInputChange(e)} />
+        {/* <Input.TextArea rows={4} placeholder="请输入公告内容" maxLength={1000} value={content} onChange={(e) => handInputChange(e)}/> */}
       </Modal>
       <UpdateForm
         onSubmit={async (value) => {
