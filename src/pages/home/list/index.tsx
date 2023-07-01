@@ -195,7 +195,7 @@ const TableList: React.FC = () => {
                       { type: 'min', name: 'Min' },
                     ],
                     label: {
-                      color: '#FFFFFF',
+                      color: '#333',
                     },
                   },
                 },
@@ -209,7 +209,7 @@ const TableList: React.FC = () => {
                       { type: 'min', name: 'Min' },
                     ],
                     label: {
-                      color: '#FFFFFF',
+                      color: '#333',
                     },
                   },
                 },
@@ -223,7 +223,7 @@ const TableList: React.FC = () => {
                       { type: 'min', name: 'Min' },
                     ],
                     label: {
-                      color: '#FFFFFF',
+                      color: '#333',
                     },
                   },
                 }
@@ -263,7 +263,7 @@ const TableList: React.FC = () => {
                       { type: 'min', name: 'Min' },
                     ],
                     label: {
-                      color: '#FFFFFF',
+                      color: '#fff',
                     },
                   },
                 }
