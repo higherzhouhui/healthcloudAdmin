@@ -10,6 +10,7 @@ const TableList: React.FC = () => {
     { title: '官方群名称', key: 'groupName', vlaue: '' },
     { title: '官方群号', key: 'groupNum', vlaue: '' },
     { title: '官方群二维码', key: 'officialGroup', vlaue: '', isImage: true },
+    { title: 'id', key: 'id', hide: true, type: 'number'},
   ]);
   const [loading, setLoading] = useState(false);
   const initData = () => {

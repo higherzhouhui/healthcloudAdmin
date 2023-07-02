@@ -1,5 +1,5 @@
 import { PageContainer } from '@ant-design/pro-layout';
-import { Button, Input, Switch, message} from 'antd';
+import { Button, message} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { updateRule, rule } from './service';
 import styles from './style.less'
@@ -9,13 +9,15 @@ import WangEditor from '@/components/Editor';
 const TableList: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [course, setCourse] = useState('')
+  const [id, setId] = useState('')
   const initData = () => {
     setLoading(true)
     rule().then(res => {
       setLoading(false)
       if (res.code === 200) {
         const data = res.data || {}
-       setCourse(data.course)
+        setCourse(data.course)
+        setId(data.id)
       } else {
         message.error(res.msg || res.message)
       }
@@ -24,7 +26,7 @@ const TableList: React.FC = () => {
 
   const handleOk = async () => {
     const hide = message.loading(`正在更新`, 50);
-    const data = {course: course}
+    const data = {course: course, id: id}
 
     try {
       const res = await updateRule(data);

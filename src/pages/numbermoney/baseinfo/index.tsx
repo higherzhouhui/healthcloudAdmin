@@ -7,13 +7,10 @@ import styles from './style.less'
 
 const TableList: React.FC = () => {
   const [baseInfo, setBaseInfo] = useState([
-    // {title: '人民币转账', key: 'rmbTransfer', vlaue: '', swith: true},
-    {title: '每日签到奖励金', key: 'signInMoney', vlaue: '', type: 'number'},
-    {title: '推荐赠送金', key: 'recommend', vlaue: '', type: 'number'},
-    {title: '注册赠送金', key: 'register', vlaue: '', type: 'number'},
-    {title: 'id', key: 'id', hide: true, value: ''},
-    {title: '股权分红比例', key: 'equityBonus', value: '', type: 'number', after: '%'},
-    {title: '兑换规则', key: 'exchange', value: '', hide: localStorage.getItem('hui') ? false : true },
+    {title: '转账功能', key: 'rmbTransfer', vlaue: '', swith: true},
+    {title: '兑换功能', key: 'rmbWithdraw', vlaue: '', swith: true},
+    {title: '最低兑换额度', key: 'rmbWithdrawAmount', vlaue: '', type: 'number'},
+    {title: 'id', key: 'id', hide: true, type: 'number'},
   ])
   const [loading, setLoading] = useState(false)
   const initData = () => {
@@ -41,8 +38,8 @@ const TableList: React.FC = () => {
     const hide = message.loading(`正在更新`, 50);
     const data: any = {}
     baseInfo.forEach(item => {
-      if (item.key === 'equityBonus') {
-        data[item.key] = Number(item.value) / 100
+      if (item.type === 'number') {
+        data[item.key] = Number(item.value)
       } else if (item.key === attar) {
         data[item.key] = value
       } else {
@@ -67,16 +64,16 @@ const TableList: React.FC = () => {
       return false;
     }
   };
-  const handleChange = (value: any, attar: string) => {
+  const handleChange = (value: any, theItem: any) => {
     const newBase = baseInfo
     newBase.forEach(item => {
-      if (item.key === attar) {
+      if (item.key === theItem.key) {
         item.value = value
       }
     })
     setBaseInfo([...newBase])
-    if (attar === 'rmbTransfer') {
-      handleOk(value, attar)
+    if (theItem.swith) {
+      handleOk(value, theItem.key)
     }
   }
 
@@ -92,7 +89,7 @@ const TableList: React.FC = () => {
             return !item.hide ? <div className={styles.formItem} key={item.key}>
             <div className={styles.label}>{item.title}</div>
               {
-                item.swith ? <Switch checked={item.value} onChange={(value) => handleChange(value, item.key)} /> : <Input value={item.value} type={item.type || 'text'} onChange={(e) => handleChange(e.target.value, item.key)} placeholder={`请输入${item.title}`} addonAfter={item.after}/>
+                item.swith ? <Switch checked={item.value} onChange={(value) => handleChange(value, item)} /> : <Input value={item.value} type={item.type || 'text'} onChange={(e) => handleChange(e.target.value, item)} placeholder={`请输入${item.title}`} addonAfter={item.after}/>
               }
           </div> : null
           })

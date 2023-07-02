@@ -9,21 +9,21 @@
 export default {
   dev: {
     '/admin-service/': {
-      target: 'https://api.jianxiangyunbao.cc',
+      target: 'http://192.168.2.166:8000',
       changeOrigin: true,
       pathRewrite: { '^admin-service': '' },
     },
   },
   test: {
     '/admin-service/': {
-      target: 'https://api.jianxiangyunbao.cc',
+      target: 'http://192.168.2.166:8000',
       changeOrigin: true,
       pathRewrite: { '^admin-service': '' },
     },
   },
   pre: {
     '/none/': {
-      target: 'https://api.jianxiangyunbao.cc',
+      target: 'http://192.168.2.166:8000',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

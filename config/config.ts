@@ -227,6 +227,30 @@ export default defineConfig({
       ],
     },
     {
+      path: '/numbermoney',
+      icon: 'Transaction',
+      name: 'numbermoney',
+      routes: [
+        {
+          path: '/numbermoney',
+          redirect: '/numbermoney/withdrawList',
+          access: 'adminRouteFilter',
+        },
+        {
+          name: 'withdrawList',
+          path: '/numbermoney/withdrawList',
+          component: './numbermoney/withdrawList',
+          access: 'adminRouteFilter',
+        },
+        {
+          name: 'baseinfo',
+          path: '/numbermoney/baseinfo',
+          component: './numbermoney/baseinfo',
+          access: 'adminRouteFilter',
+        }
+      ],
+    },
+    {
       path: '/online',
       icon: 'Aliwangwang',
       name: 'online',
