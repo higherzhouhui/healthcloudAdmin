@@ -161,7 +161,7 @@ const TableList: React.FC = () => {
           collapseRender:()=>false,
         }}
         toolBarRender={() => [
-          <Button type="primary" key="primary" onClick={() => export2Excel('userAccountList', '交易记录')}>
+          <Button type="primary" key="primary" onClick={() => export2Excel('userMoney', '钱包余额')}>
             <TableOutlined />
             导出Excel
           </Button>,
@@ -170,7 +170,7 @@ const TableList: React.FC = () => {
         pagination={{
           current: 1
         }}
-        id='userAccountList'
+        id='userMoney'
         scroll={{
           y: document?.body?.clientHeight - 390,
         }}
