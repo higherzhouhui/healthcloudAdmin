@@ -1,7 +1,7 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Form, Input, message, Modal, Popconfirm, Image } from 'antd';
+import { Button, Form, Input, message, Modal, Image } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { TableListItem, TableListPagination } from './data';
 import { addRule, removeRule, rule, updateRule } from './service';
@@ -9,7 +9,8 @@ import ProForm, { ProFormUploadButton } from '@ant-design/pro-form';
 import { request } from 'umi';
 import { TableOutlined } from '@ant-design/icons';
 import * as XLSX from 'xlsx';
-import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
+import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
+import ProDescriptions from '@ant-design/pro-descriptions';
 /**
  * 删除节点
  *

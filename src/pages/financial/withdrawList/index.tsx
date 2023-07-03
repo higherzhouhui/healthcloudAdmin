@@ -1,15 +1,14 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Form, Input, message, Modal, Popconfirm } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Button, Form, Input, message, Modal, Popconfirm, Switch } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import type { TableListItem, TableListPagination } from './data';
-import { addRule, removeRule, rule, updateRule } from './service';
+import { addRule, removeRule, rule, updateRule, getConfig, updateConfig } from './service';
 import ProForm, { ProFormUploadButton } from '@ant-design/pro-form';
 import { request } from 'umi';
 import * as XLSX from 'xlsx'
-import { TableOutlined, UsbTwoTone } from '@ant-design/icons';
-import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
+import { TableOutlined } from '@ant-design/icons';
 /**
  * 删除节点
  *
@@ -52,6 +51,7 @@ const TableList: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [type, setType] = useState(1)
   const formRef = useRef<any>()
+  const [baseConfig, setBaseConfig] = useState<any>({})
   const handleUpdateRecord = (record: TableListItem, ctype: number) => {
     if (loading) {
       return
@@ -229,6 +229,28 @@ const TableList: React.FC = () => {
     const wb = XLSX.utils.table_to_book(exportFileContent, { sheet: 'sheet1' });
     XLSX.writeFile(wb, `${name}.xlsx`);
   };
+  
+  const handleChangeSwitch = (flag: boolean) => {
+    updateConfig({...baseConfig, cashWithdraw: flag}).then(res => {
+      if (res.code === 200) {
+        setBaseConfig({...baseConfig, cashWithdraw: flag})
+      } else {
+        message.error(res?.message || res?.msg)
+      }
+    })
+  }
+
+  const getBaseConfig = () => {
+    getConfig().then(res => {
+      if (res.code === 200) {
+        setBaseConfig({id: res?.data?.id, cashWithdraw: res?.data?.cashWithdraw})
+      }
+    })
+  }
+
+  useEffect(() => {
+    getBaseConfig()
+  }, [])
 
   return (
     <PageContainer>
@@ -246,6 +268,7 @@ const TableList: React.FC = () => {
           current: 1
         }}
         dateFormatter="string"
+        headerTitle={<div>现金提现开关：<Switch checked={baseConfig?.cashWithdraw} onChange={(e) => handleChangeSwitch(e)} /></div>}
         toolBarRender={() => [
           <Button type="primary" key="primary" onClick={() => export2Excel('withdrawListIndex', '出款审核列表')}>
             <TableOutlined />

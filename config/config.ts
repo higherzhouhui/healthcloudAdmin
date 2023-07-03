@@ -224,6 +224,18 @@ export default defineConfig({
           component: './financial/bankAccount',
           access: 'adminRouteFilter',
         },
+        {
+          name: 'userAccountList',
+          path: '/financial/userAccountList',
+          component: './financial/userAccountList',
+          access: 'adminRouteFilter',
+        },
+        {
+          name: 'userMoney',
+          path: '/financial/userMoney',
+          component: './financial/userMoney',
+          access: 'adminRouteFilter',
+        },
       ],
     },
     {

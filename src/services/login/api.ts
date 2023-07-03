@@ -21,9 +21,9 @@ request.interceptors.request.use((url, options) => {
   const { NODE_ENV } = process.env;
   let baseUrl = 'https://api.jianxiangyunbao.cc'
   let before = '/admin-service'
-  if (NODE_ENV === 'development') {
-    baseUrl = ''
-  }
+  // if (NODE_ENV === 'development') {
+  //   baseUrl = ''
+  // }
   if (url.includes('upload-service')) {
     before = ''
   }

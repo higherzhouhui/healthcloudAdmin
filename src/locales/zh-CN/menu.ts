@@ -40,6 +40,8 @@ export default {
   'menu.financial.withdrawList': '出款审核',
   'menu.financial.transaction': '订单',
   'menu.financial.bankAccount': '银行账户',
+  'menu.financial.userAccountList': '交易记录',
+  'menu.financial.userMoney': '钱包余额',
   'menu.numbermoney': '数字人民币',
   'menu.numbermoney.withdrawList': '提款审核',
   'menu.numbermoney.baseinfo': '额度配置',
