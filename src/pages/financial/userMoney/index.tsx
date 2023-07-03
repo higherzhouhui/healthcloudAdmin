@@ -172,7 +172,6 @@ const TableList: React.FC = () => {
         }}
         id='userAccountList'
         scroll={{
-          x: 1400,
           y: document?.body?.clientHeight - 390,
         }}
         request={async (params: any) => {
