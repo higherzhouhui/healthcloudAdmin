@@ -122,7 +122,13 @@ const TableList: React.FC = () => {
       }
     },
     {
-      title: '资金来源',
+      title: '描述',
+      dataIndex: 'describe',
+      width: 120,
+      hideInSearch: true,
+    },
+    {
+      title: '资金类型',
       dataIndex: 'typeStr',
       width: 120,
       hideInSearch: true,
