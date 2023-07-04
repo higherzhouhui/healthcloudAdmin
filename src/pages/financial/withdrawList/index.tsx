@@ -9,6 +9,8 @@ import ProForm, { ProFormUploadButton } from '@ant-design/pro-form';
 import { request } from 'umi';
 import * as XLSX from 'xlsx'
 import { TableOutlined } from '@ant-design/icons';
+import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
+import ProDescriptions from '@ant-design/pro-descriptions';
 /**
  * 删除节点
  *
@@ -268,7 +270,7 @@ const TableList: React.FC = () => {
           current: 1
         }}
         dateFormatter="string"
-        headerTitle={<div>现金提现开关：<Switch checked={baseConfig?.cashWithdraw} onChange={(e) => handleChangeSwitch(e)} /></div>}
+        headerTitle={<div>现金钱包提现：<span style={{color: baseConfig?.cashWithdraw ? '#000' : 'blue'}}>关</span><Switch checked={baseConfig?.cashWithdraw} onChange={(e) => handleChangeSwitch(e)} /><span style={{color: baseConfig?.cashWithdraw ? 'blue' : '#000'}}>开</span></div>}
         toolBarRender={() => [
           <Button type="primary" key="primary" onClick={() => export2Excel('withdrawListIndex', '出款审核列表')}>
             <TableOutlined />

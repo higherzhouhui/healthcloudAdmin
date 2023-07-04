@@ -11,6 +11,7 @@ const TableList: React.FC = () => {
     {title: '团队第一层奖励', key: 'groupOne', vlaue: '', type: 'number'},
     {title: '团队第二层奖励', key: 'groupTwo', vlaue: '', type: 'number'},
     {title: '团队第三层奖励', key: 'groupThree', vlaue: '', type: 'number'},
+    {title: 'id', key: 'id', vlaue: '', hide: true},
   ])
   const [loading, setLoading] = useState(false)
   const initData = () => {

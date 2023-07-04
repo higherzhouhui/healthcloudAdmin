@@ -240,7 +240,7 @@ export default defineConfig({
     },
     {
       path: '/numbermoney',
-      icon: 'Transaction',
+      icon: 'MoneyCollect',
       name: 'numbermoney',
       routes: [
         {

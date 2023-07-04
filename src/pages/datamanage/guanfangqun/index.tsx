@@ -96,9 +96,9 @@ const TableList: React.FC = () => {
   return (
     <PageContainer subTitle="图片或者是视频文件请上传文件后将链接填入">
       <div className={styles.form}>
-        {baseInfo.map((item) => {
+        {baseInfo.map((item: any) => {
           return (
-            <div className={styles.formItem} key={item.key}>
+              item.hide ? null : <div className={styles.formItem} key={item.key}>
               <div className={styles.label}>
                 {item.title}
                 {item.isImage ? <Image src={item.value} className={styles.image} /> : null}
