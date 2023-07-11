@@ -354,7 +354,7 @@ const TableList: React.FC = () => {
     <PageContainer>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}
-        rowKey="mobilePhone"
+        rowKey="userId"
         dateFormatter="string"
         id="accountListIndex"
         headerTitle={`总会员：${total}`}

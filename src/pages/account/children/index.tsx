@@ -11,7 +11,6 @@ import ProForm from '@ant-design/pro-form';
 import style from './style.less'
 import { history, useLocation } from 'umi';
 import { isArray } from 'lodash';
-import { EditOutlined, FormOutlined, PartitionOutlined } from '@ant-design/icons';
 
 const TableList: React.FC = () => {
   /** 分布更新窗口的弹窗 */
@@ -86,7 +85,7 @@ const TableList: React.FC = () => {
       tooltip: '点击可查看下级会员',
       render: (_, record) => {
         return (
-          <div className={style.link} onClick={() => routeToChildren(record.id, record.name)}>{record.id}</div>
+          <div className={style.link} onClick={() => routeToChildren(record.userId, record.name)}>{record.id}</div>
         );
       },
     },
@@ -355,7 +354,7 @@ const TableList: React.FC = () => {
     <PageContainer subTitle={<div className={style.link} onClick={() => history.push('/account/list')}>返回会员列表</div>}>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}
-        rowKey="id"
+        rowKey="userId"
         dateFormatter="string"
         headerTitle={element}
         search={false}
