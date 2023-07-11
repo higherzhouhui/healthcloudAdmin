@@ -85,7 +85,7 @@ const TableList: React.FC = () => {
       tooltip: '点击可查看下级会员',
       render: (_, record) => {
         return (
-          <div className={style.link} onClick={() => routeToChildren(record.id, record.name)}>{record.id}</div>
+          <div className={style.link} onClick={() => routeToChildren(record.userId, record.name)}>{record.id}</div>
         );
       },
     },
