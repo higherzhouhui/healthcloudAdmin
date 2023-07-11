@@ -9,21 +9,21 @@
 export default {
   dev: {
     '/admin-service/': {
-      target: 'http://192.168.2.166:8000',
+      target: 'http://api.jxybao.com',
       changeOrigin: true,
       pathRewrite: { '^admin-service': '' },
     },
   },
   test: {
     '/admin-service/': {
-      target: 'http://192.168.2.166:8000',
+      target: 'http://api.jxybao.com',
       changeOrigin: true,
       pathRewrite: { '^admin-service': '' },
     },
   },
   pre: {
     '/none/': {
-      target: 'http://192.168.2.166:8000',
+      target: 'http://api.jxybao.com',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

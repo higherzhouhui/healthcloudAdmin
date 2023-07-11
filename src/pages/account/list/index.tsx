@@ -33,12 +33,12 @@ const TableList: React.FC = () => {
     formRef?.current?.resetFields();
   };
   const routeToChildren = (record: TableListItem) => {
-    history.push(`/account/children?userId=${record.id}&name=${record.name}`);
+    history.push(`/account/children?userId=${record.userId}&name=${record.name}`);
   };
 
-  const handleRemove = async (id: number) => {
+  const handleRemove = async (userId: number) => {
     const hide = message.loading('正在删除...')
-    const res = await removeRule({id: id})
+    const res = await removeRule({id: userId})
     hide()
     if (res.code === 200) {
       message.success('删除成功,正在刷新!')
@@ -233,7 +233,7 @@ const TableList: React.FC = () => {
         <Popconfirm
           title="确认删除该会员?"
           onConfirm={async () => {
-            handleRemove(record.id)
+            handleRemove(record.userId)
           }}
           key="access"
         >
@@ -354,7 +354,7 @@ const TableList: React.FC = () => {
     <PageContainer>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}
-        rowKey="mobilePhone"
+        rowKey="userId"
         dateFormatter="string"
         id="accountListIndex"
         headerTitle={`总会员：${total}`}

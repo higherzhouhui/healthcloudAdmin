@@ -7,6 +7,7 @@ import styles from './style.less';
 const TableList: React.FC = () => {
   const [video, setVideo] = useState('')
   const [loading, setLoading] = useState(false);
+  const [id, setId] = useState('')
   const initData = () => {
     setLoading(true);
     rule().then((res) => {
@@ -14,6 +15,7 @@ const TableList: React.FC = () => {
       if (res.code === 200) {
         const data = res.data || {};
         setVideo(data.video)
+        setId(data.id)
       } else {
         message.error(res.msg || res.message);
       }
@@ -22,7 +24,7 @@ const TableList: React.FC = () => {
 
   const handleOk = async () => {
     const hide = message.loading(`正在更新`, 50);
-    const data = {video: video};
+    const data = {video: video, id: id};
     try {
       const res = await updateRule(data);
       hide();
