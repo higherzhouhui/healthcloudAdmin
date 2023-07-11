@@ -11,6 +11,7 @@ export type TableListItem = {
   type: string;
   mobilePhone: string;
   totalChildren?: number;
+  userId?: string;
 };
 
 export interface TableListPagination extends TableListItem{
