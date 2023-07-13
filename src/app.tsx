@@ -23,6 +23,10 @@ export async function getInitialState(): Promise<{
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
+    if (!localStorage.getItem('Access-Token')) {
+      history.push(loginPath);
+      return undefined
+    }
     try {
       const msg: any = await queryCurrentUser();
       let data;
