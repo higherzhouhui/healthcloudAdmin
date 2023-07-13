@@ -72,14 +72,7 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <div className={styles.form}>
-        <video width="480" height="360" controls>
-          <source src={video} type="video/mp4" />
-          <source src={video} type="video/ogg" />
-          <source src={video} type="video/webm" />
-          <object data="movie.mp4" width="480" height="360">
-            <embed src={video} width="480" height="360" />
-          </object> 
-        </video>
+        <video width="480" height="360" controls src={video} />
         <Input type='text' onClick={() => handleUploadFile()} value={video}/>
       </div>
       <div className={styles.submit}>
