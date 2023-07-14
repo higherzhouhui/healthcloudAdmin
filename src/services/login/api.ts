@@ -2,7 +2,6 @@
 /* eslint-disable */
 import { message } from 'antd';
 import request from 'umi-request';
-import { removePending, addPending } from './pending';
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
   let token = null;
