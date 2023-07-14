@@ -334,16 +334,18 @@ const TableList: React.FC = () => {
       const { onSuccess, onError, file } = options;
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('type', 'images');
+      formData.append('path', 'admin-widthdraw');
       // /upload为图片上传的地址，后台只需要一个图片的path
       // name，path，status是组件上传需要的格式需要自己去拼接
       request('/upload-service/upload/uploadImage', { method: 'POST', data: formData })
         .then(async (data: any) => {
-          const _response = { name: file.name, status: 'done', path: data.data };
+          const _response = { name: file.name, status: 'done', path: data.data.path };
           setType(2);
-          setContent(data.data);
+          setContent(data.data.path);
           //请求成功后把file赋值上去
           onSuccess(_response, file);
-          await handleOk(2, data.data);
+          await handleOk(2, data.data.path);
         })
         .catch(onError);
     },

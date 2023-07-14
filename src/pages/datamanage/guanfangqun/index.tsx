@@ -10,7 +10,7 @@ const TableList: React.FC = () => {
     { title: '官方群名称', key: 'groupName', vlaue: '' },
     { title: '官方群号', key: 'groupNum', vlaue: '' },
     { title: '官方群二维码', key: 'officialGroup', vlaue: '', isImage: true },
-    { title: 'id', key: 'id', hide: true, type: 'number'},
+    { title: 'id', key: 'id', vlaue: '', hide: true },
   ]);
   const [loading, setLoading] = useState(false);
   const initData = () => {
@@ -96,9 +96,9 @@ const TableList: React.FC = () => {
   return (
     <PageContainer subTitle="图片或者是视频文件请上传文件后将链接填入">
       <div className={styles.form}>
-        {baseInfo.map((item: any) => {
+        {baseInfo.map((item) => {
           return (
-              item.hide ? null : <div className={styles.formItem} key={item.key}>
+            <div className={styles.formItem} key={item.key}>
               <div className={styles.label}>
                 {item.title}
                 {item.isImage ? <Image src={item.value} className={styles.image} /> : null}

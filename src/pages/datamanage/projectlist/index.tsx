@@ -103,7 +103,7 @@ const TableList: React.FC = () => {
       width: 500,
     },
     {
-      title: '每日社保补贴',
+      title: '每日补贴',
       dataIndex: 'dayEarnings',
       hideInTable: type == 1 ? false : true,
       width: 120,
@@ -232,8 +232,8 @@ const TableList: React.FC = () => {
       // name，path，status是组件上传需要的格式需要自己去拼接
       request('/upload-service/upload/uploadImage', { method: 'POST', data: formData })
         .then((data: any) => {
-          const _response = { name: file.name, status: 'done', path: data.data };
-          handleChange(data.data, 'image');
+          const _response = { name: file.name, status: 'done', path: data.data.path };
+          handleChange(data.data.path, 'image');
           //请求成功后把file赋值上去
           onSuccess(_response, file);
         })
@@ -259,9 +259,9 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <Radio.Group value={type} size="middle" onChange={(e) => onchangeType(e)} buttonStyle="solid">
-        <Radio.Button value={1}>理财计划</Radio.Button>
-        <Radio.Button value={2}>股权</Radio.Button>
-        <Radio.Button value={3}>养老</Radio.Button>
+        <Radio.Button value={1}>爱心福利</Radio.Button>
+        <Radio.Button value={2}>数贸股权</Radio.Button>
+        <Radio.Button value={3}>数贸基金</Radio.Button>
       </Radio.Group>
       <ProTable<TableListItem, TableListPagination>
         actionRef={actionRef}
@@ -380,8 +380,8 @@ const TableList: React.FC = () => {
             <Input type='number' value={currentRow?.price} onChange={(e) => handleChange(e.target.value, 'price')} placeholder='请输入价格'/>
           </Form.Item>
           {
-            type == 1 ? <Form.Item label="每日社保补贴">
-            <Input type='number' value={currentRow?.dayEarnings} onChange={(e) => handleChange(e.target.value, 'dayEarnings')} placeholder='请输入每日社保补贴'/>
+            type == 1 ? <Form.Item label="每日补贴">
+            <Input type='number' value={currentRow?.dayEarnings} onChange={(e) => handleChange(e.target.value, 'dayEarnings')} placeholder='请输入每日补贴'/>
           </Form.Item> : null
           }
           <Form.Item label="是否售罄">

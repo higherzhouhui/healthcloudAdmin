@@ -38,8 +38,10 @@ const WangEditor: FC<EditorInterface> = memo(({ onChange, description }) => {
       // const url: string = await uploadToAliOss(file);
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('type', 'images');
+      formData.append('path', 'admin-richText');
       request('/upload-service/upload/uploadImage', { method: 'POST', data: formData }).then((res) => {
-        insertFn(res.data, file.name, res.data);
+        insertFn(res.data.path, file.name, res.data.path);
       })
       // 最后插入图片
     },

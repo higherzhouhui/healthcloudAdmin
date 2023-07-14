@@ -158,12 +158,12 @@ export default defineConfig({
           component: './datamanage/list',
           access: 'adminRouteFilter',
         },
-        {
-          name: 'datamanage-course',
-          path: '/datamanage/course',
-          component: './datamanage/course',
-          access: 'adminRouteFilter',
-        },
+        // {
+        //   name: 'datamanage-course',
+        //   path: '/datamanage/course',
+        //   component: './datamanage/course',
+        //   access: 'adminRouteFilter',
+        // },
         {
           name: 'datamanage-video',
           path: '/datamanage/video',
@@ -171,11 +171,35 @@ export default defineConfig({
           access: 'adminRouteFilter',
         },
         {
-          name: 'datamanage-guanfangqun',
-          path: '/datamanage/guanfangqun',
-          component: './datamanage/guanfangqun',
+          name: 'datamanage-blogs',
+          path: '/datamanage/blogs',
+          component: './datamanage/blogs',
           access: 'adminRouteFilter',
         },
+        {
+          name: 'datamanage-equityCert',
+          path: '/datamanage/equityCert',
+          component: './datamanage/equityCert',
+          access: 'adminRouteFilter',
+        },
+        {
+          name: 'datamanage-microphygmia',
+          path: '/datamanage/microphygmia',
+          component: './datamanage/microphygmia',
+          access: 'adminRouteFilter',
+        },
+        {
+          name: 'datamanage-microphygmiaDown',
+          path: '/datamanage/microphygmiaDown',
+          component: './datamanage/microphygmiaDown',
+          access: 'adminRouteFilter',
+        },
+        // {
+        //   name: 'datamanage-guanfangqun',
+        //   path: '/datamanage/guanfangqun',
+        //   component: './datamanage/guanfangqun',
+        //   access: 'adminRouteFilter',
+        // },
         {
           name: 'datamanage-baseinfo',
           path: '/datamanage/baseinfo',
