@@ -53,6 +53,8 @@ const TableList: React.FC = () => {
       // 处理选择的文件，可以进行上传操作等
       const formData = new FormData();
       formData.append('file', selectedFile);
+      formData.append('type', 'images');
+      formData.append('path', 'admin-richText');
       uploadFile(formData).then((res) => {
         hide();
         if (res.code === 200) {

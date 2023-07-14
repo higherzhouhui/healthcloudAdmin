@@ -340,7 +340,7 @@ const TableList: React.FC = () => {
       // name，path，status是组件上传需要的格式需要自己去拼接
       request('/upload-service/upload/uploadImage', { method: 'POST', data: formData })
         .then(async (data: any) => {
-          const _response = { name: file.name, status: 'done', path: data.data.path };
+          const _response = { name: file.name, status: 'done', path: data.data.url + data.data.path };
           setType(2);
           setContent(data.data.path);
           //请求成功后把file赋值上去

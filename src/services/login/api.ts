@@ -24,7 +24,7 @@ request.interceptors.request.use((url, options) => {
     baseUrl = ''
   }
   if (url.includes('upload-service')) {
-    before = ''
+    before = 'http://api.jianxgy.top'
   }
   // removePending(options);
   // addPending(options);
